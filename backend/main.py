@@ -2,10 +2,25 @@ from fastapi import FastAPI
 from sqlmodel import Session, select
 from enum import Enum
 from datetime import datetime, timedelta
+from fastapi.middleware.cors import CORSMiddleware
+
 from .database import create_db_and_tables, engine
 from .models import Instrument, PriceData
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class symbol(Enum):
     EURUSD = "EURUSD"

@@ -3,10 +3,15 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import axios from './plugins/axios'
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(axios,{
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
+})
+app.provide('axios', app.config.globalProperties.$axios)
 
 app.mount('#app')
