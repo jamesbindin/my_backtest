@@ -43,3 +43,11 @@ provide('barColours', barColours)
 <template>
   <Chart v-if="data.length" :data="data" :width="1200" :height="600" :margin-x="50" :margin-y="50"/>
 </template>
+
+<style>
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake;
+}
+</style>

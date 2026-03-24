@@ -6,6 +6,10 @@
       <Candlestick :d="d" :stroke-width="0.3"/>
     </g>
   </svg> 
+  <div class="buttons flex gap-2">
+      <button class="btn" @click="$emit('step-back')">Step Back</button>
+      <button class="btn" @click="$emit('step-forward')">Step Forward</button>
+  </div>
 </template>
 
 <script setup lang="ts">
