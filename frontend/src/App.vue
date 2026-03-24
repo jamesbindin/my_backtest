@@ -1,31 +1,28 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
+import Chart from './Chart.vue'
 
 const axios: any = inject('axios')
+const data = ref([])
 
 onMounted(() => {
-  axios.get('bars/EURUSD/D1', {
+  axios.get('bars/EURUSD/M15', {
     params: {
       timefrom: '2020-01-01T00:00',
-      timeto: '2020-12-31T23:59'
+      limit: 150
     }
   }).then((response: any) => {
-    console.log(response)
-    console.log(response.data)
+    data.value = response.data
   }).catch((error: any) => {
     console.error('Error fetching data:', error)
   })
 })
 
 </script>
-
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <Chart v-if="data.length" :data="data"/>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
