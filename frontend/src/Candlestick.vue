@@ -61,5 +61,5 @@ const fillColour = (open: number, close: number): string => {
     return open < close ? (barColours.up ?? '') : (barColours.down ?? '')
 }
 
-let barWidth = x((timeFrameSteps[timeframe] ?? 0) * 2) - x(timeFrameSteps[timeframe] ?? 0)
+let barWidth = x.value((timeFrameSteps[timeframe] ?? 0) * 2) - x.value(timeFrameSteps[timeframe] ?? 0)
 </script>

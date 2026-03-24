@@ -5,20 +5,48 @@ import Chart from './Chart.vue'
 
 const axios: any = inject('axios')
 const data = ref([])
+const chartData = ref([])
 const timeFrame = 'M5'
+const limit = 100
+const numberOfBarsOnChart = 20
+const chartIndexRange = ref({
+  from: limit - numberOfBarsOnChart,
+  to: limit 
+})
 
-onMounted(() => {
+function retrieveData(){
   axios.get(`bars/EURUSD/${timeFrame}`, {
     params: {
       timefrom: '2020-01-01T00:00',
-      limit: 100
+      limit: limit 
     }
   }).then((response: any) => {
     data.value = response.data
+    chartData.value = data.value.slice(chartIndexRange.value.from, chartIndexRange.value.to)
   }).catch((error: any) => {
     console.error('Error fetching data:', error)
   })
+}
+
+onMounted(() => {
+  retrieveData()
 })
+
+function stepBack() {
+  console.log('Step Back')
+  if(chartIndexRange.value.from <= 0) return
+  chartIndexRange.value.from -= 1
+  chartIndexRange.value.to -= 1
+  chartData.value = data.value.slice(chartIndexRange.value.from, chartIndexRange.value.to)
+}
+
+function stepForward() {
+  console.log('Step Forward')
+  if(chartIndexRange.value.to >= data.value.length) return
+  chartIndexRange.value.from += 1
+  chartIndexRange.value.to += 1
+  chartData.value = data.value.slice(chartIndexRange.value.from, chartIndexRange.value.to)
+}
 
 const timeFrameSteps: Record<string, number> = {
   'M1': 60 * 1000,
@@ -41,7 +69,7 @@ provide('barColours', barColours)
 
 </script>
 <template>
-  <Chart v-if="data.length" :data="data" :width="1200" :height="600" :margin-x="50" :margin-y="50"/>
+  <Chart v-if="data.length" :data="chartData" :width="1200" :height="600" :margin-x="50" :margin-y="50" @stepBack="stepBack" @stepForward="stepForward"/>
 </template>
 
 <style>
