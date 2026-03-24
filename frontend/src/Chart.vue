@@ -14,20 +14,33 @@ const props = defineProps({
   data: {
     type: [Object],
     required: true
+  }, 
+  width: {
+    type: Number,
+    default: 640
+  },
+  height: {
+    type: Number,
+    default: 400
+  },
+  marginX: {
+    type: Number,
+    default: 40
+  },
+  marginY: {
+    type: Number,
+    default: 40
   }
 })
 
-const width = ref(640);
-const height = ref(400);
-const marginX = ref(40)
-const marginY = ref(40)
 const gx = useTemplateRef('gx')
 const gy = useTemplateRef('gy')
 const yMax = d3.max(props.data as Array<any>, (d) => d?.high)
 const yMin = d3.min(props.data as Array<any>, (d) => d?.low)
+
 onMounted(() => {
-    let y = d3.scaleLinear([yMax, yMin], [marginY.value, height.value - marginY.value])
-    let x = d3.scaleUtc([new Date(props.data[0].time), new Date(props.data[props.data.length - 1].time)], [marginX.value, width.value - marginX.value])
+    let y = d3.scaleLinear([yMax, yMin], [props.marginY, props.height - props.marginY])
+    let x = d3.scaleUtc([new Date(props.data[0].time), new Date(props.data[props.data.length - 1].time)], [props.marginX, props.width - props.marginX])
     if(gx.value && gy.value) {
       d3.select(gx.value).call(d3.axisBottom(x));
       d3.select(gy.value).call(d3.axisLeft(y));
