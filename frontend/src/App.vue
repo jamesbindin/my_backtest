@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, provide } from 'vue'
 import { inject, ref } from 'vue'
 import Chart from './Chart.vue'
 
 const axios: any = inject('axios')
 const data = ref([])
+const timeFrame = 'M15'
 
 onMounted(() => {
-  axios.get('bars/EURUSD/M15', {
+  axios.get(`bars/EURUSD/${timeFrame}`, {
     params: {
       timefrom: '2020-01-01T00:00',
-      limit: 150
+      limit: 10
     }
   }).then((response: any) => {
     data.value = response.data
@@ -19,10 +20,20 @@ onMounted(() => {
   })
 })
 
+const timeFrameSteps: Record<string, number> = {
+  'M1': 60 * 1000,
+  'M5': 5 * 60 * 1000,
+  'M15': 15 * 60 * 1000,
+  'M30': 30 * 60 * 1000,
+  'H1': 60 * 60 * 1000,
+  'H4': 4 * 60 * 60 * 1000,
+  'D1': 24 * 60 * 60 * 1000,
+}
+
+provide('timeFrameSteps', timeFrameSteps)
+provide('timeframe', timeFrame)
+
 </script>
 <template>
-  <Chart v-if="data.length" :data="data"/>
+  <Chart v-if="data.length" :data="data" :width="1200" :height="600" :margin-x="50" :margin-y="50"/>
 </template>
-
-<style scoped>
-</style>
