@@ -5,13 +5,13 @@ import Chart from './Chart.vue'
 
 const axios: any = inject('axios')
 const data = ref([])
-const timeFrame = 'M15'
+const timeFrame = 'M5'
 
 onMounted(() => {
   axios.get(`bars/EURUSD/${timeFrame}`, {
     params: {
       timefrom: '2020-01-01T00:00',
-      limit: 10
+      limit: 100
     }
   }).then((response: any) => {
     data.value = response.data
@@ -30,8 +30,14 @@ const timeFrameSteps: Record<string, number> = {
   'D1': 24 * 60 * 60 * 1000,
 }
 
+const barColours: Record<string, string> = {
+    up: 'rgba(255, 0, 0, 0.2)',
+    down: 'rgba(0, 255, 0, 0.2)'
+}
+
 provide('timeFrameSteps', timeFrameSteps)
 provide('timeframe', timeFrame)
+provide('barColours', barColours)
 
 </script>
 <template>

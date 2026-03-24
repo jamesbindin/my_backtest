@@ -3,7 +3,7 @@
     <g ref="gx" :transform="`translate(0, ${height - props.marginY})`"></g>
     <g ref="gy" :transform="`translate(${props.marginX}, 0)`"></g>
     <g v-for="d in data" :key="d.time">
-      <Candlestick :d="d"/>
+      <Candlestick :d="d" :stroke-width="0.3"/>
     </g>
   </svg> 
 </template>
