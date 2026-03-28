@@ -14,8 +14,7 @@
 
 <script setup lang="ts">
 
-import * as d3 from 'd3'
-import { onMounted, ref, useTemplateRef, provide, inject, watch } from 'vue'
+import { ref } from 'vue'
 import Candlestick from './Candlestick.vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
@@ -42,6 +41,8 @@ const props = defineProps({
     default: 40
   }
 })
+
+defineEmits(['step-back', 'step-forward'])
 
 let y = ref();
 let x = ref();

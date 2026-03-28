@@ -74,7 +74,6 @@ provide('barColours', barColours)
 
 <style>
 @import "tailwindcss";
-@plugin "daisyui";
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark, cupcake;
 }
