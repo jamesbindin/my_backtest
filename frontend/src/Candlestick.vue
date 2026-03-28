@@ -48,18 +48,24 @@ const props = defineProps({
     downFillColour: {
         type: Object,
         default: {r: 0, g: 255, b: 0, a: 0.5}
+    },
+    x: {
+        type: Function,
+        required: true
+    },
+    y: {
+        type: Function,
+        required: true
     }
 })
 
 const timeFrameSteps = inject('timeFrameSteps') as Record<string, number>
 const timeframe = inject('timeframe') as string
-const x = inject('x') as any
-const y = inject('y') as any  
 const barColours = inject('barColours') as Record<string, string>
 
 const fillColour = (open: number, close: number): string => {
     return open < close ? (barColours.up ?? '') : (barColours.down ?? '')
 }
 
-let barWidth = x.value((timeFrameSteps[timeframe] ?? 0) * 2) - x.value(timeFrameSteps[timeframe] ?? 0)
+let barWidth = props.x((timeFrameSteps[timeframe] ?? 0) * 2) - props.x(timeFrameSteps[timeframe] ?? 0)
 </script>
