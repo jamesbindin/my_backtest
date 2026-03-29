@@ -11,27 +11,22 @@ export const useChartStore = defineStore('chart', () => {
   const y = ref<any>(null)
 
   function updateData(newData: any) {
-    console.log('Updating data in store', newData)
     data.value = newData
   }
 
   function updateChartData(newChartData: any) {
-    console.log('Updating chart data in store', newChartData)
     chartData.value = newChartData
   }
 
   function updateChartIndexRange(newRange: { from: number, to: number }) {
-    console.log('Updating chart index range in store', newRange)
     chartIndexRange.value = newRange
   }
 
   function updateX(newX: any) {
-    console.log('Updating x in store', newX)
     x.value = newX
   }
 
   function updateY(newY: any) {
-    console.log('Updating y in store', newY)
     y.value = newY
   }
 

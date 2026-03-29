@@ -39,6 +39,11 @@ watch(() => chartStore.chartData, (newData) => {
   setScales(newData)
 })
 
+watch(() => chartStore.x, (newX) => {
+    if(!gx.value) return
+    d3.select(gx.value).call(d3.axisBottom(newX));
+})
+
 function setScales(this: any, newData?: any) {
     if(!gx.value) return
     const dataToUse = newData ?? chartStore.chartData
@@ -51,9 +56,6 @@ onMounted(() => {
     setScales()
 })
 
-watch(() => controlsStore.pointerDragDistanceX, (newDistance) => {
-  console.log('Pointer drag distance X changed in ChartXScale component', newDistance)
-})
 
 </script>
 

@@ -3,21 +3,17 @@
       <button class="btn" @click="stepBack">Step Back</button>
       <button class="btn" @click="stepForward">Step Forward</button>
   </div>
-  {{ pointer }}
 </template>
 <script lang="ts" setup>
-
-import { watch } from 'vue'
+import * as d3 from 'd3'
+import { onMounted, watch, ref } from 'vue'
 import { useChartStore } from './stores/chart'
-import { useControlsStore } from './stores/controls'
-
 
 const chartStore = useChartStore()
-const controlsStore = useControlsStore()
 
 
 const props = defineProps({
-    pointer: {
+    svg: {
         type: Object,
         required: true
     },
@@ -40,7 +36,6 @@ const props = defineProps({
 })
 
 function stepBack() {
-  console.log('Step Back')
   if(chartStore.chartIndexRange.from <= 0) return
     chartStore.updateChartIndexRange({
         from: chartStore.chartIndexRange.from - 1,
@@ -51,7 +46,6 @@ function stepBack() {
 }
 
 function stepForward() {
-  console.log('Step Forward')
   if(chartStore.chartIndexRange.to >= chartStore.data.length) return
     chartStore.updateChartIndexRange({
         from: chartStore.chartIndexRange.from + 1,
@@ -61,19 +55,43 @@ function stepForward() {
   chartStore.updateChartData(chartData)
 }
 
-let pointerDragStartX: number | null = null
+let pointerDown = ref(false)
+let pointerDragStartX = ref<number | null>(null)
+let pointerDragDistanceX = ref<number | null>(null)
+let pointerDragtStartDomain: [Date, Date] | null = null
 
-watch(() => props.pointer.pressure.value, (newPressure) => {
-    console.log(props.pointer.x.value)
-    if(newPressure > 0) {
-        pointerDragStartX = props.pointer.x.value
-        console.log('Pointer is pressing down at x:', props.pointer.x.value)
-    } else {
-        let pointerDragDistanceX = props.pointer.x.value - (pointerDragStartX ?? props.pointer.x.value)
-        console.log('Pointer released at x:', props.pointer.x.value, 'Drag distance:', pointerDragDistanceX)
-        controlsStore.updatePointerDragDistanceX(pointerDragDistanceX)
-    }
+onMounted(() => {
+    props.svg?.addEventListener('pointerdown', (event: PointerEvent) => {
+        event.preventDefault()
+        pointerDown.value = true
+        pointerDragStartX.value = event.clientX
+        pointerDragtStartDomain = chartStore.x.domain()
+    })
+    props.svg?.addEventListener('pointermove', (event: PointerEvent) => {
+        event.preventDefault()
+        if(pointerDown.value) {
+            pointerDragDistanceX.value = event.clientX - (pointerDragStartX.value ?? event.clientX)
+        }
+    })
+    props.svg?.addEventListener('pointerup', (event: PointerEvent) => {
+        event.preventDefault()
+        pointerDown.value = false
+    })
+    props.svg?.addEventListener('pointercancel', (event: PointerEvent) => {
+        event.preventDefault()
+        pointerDown.value = false
+    })
 })
+
+watch(pointerDragDistanceX, (newDistance) => {
+    if(newDistance === null || pointerDragtStartDomain === null || pointerDragStartX.value === null) return
+    const delta = chartStore.x.invert(pointerDragStartX.value) - chartStore.x.invert(pointerDragStartX.value - newDistance)
+    const newStartTime = pointerDragtStartDomain[0].getTime() - delta
+    const newEndTime = pointerDragtStartDomain[1].getTime() - delta
+
+    chartStore.updateX(chartStore.x.copy().domain([new Date(newStartTime), new Date(newEndTime)])) 
+})
+
 </script>
 <style scoped>
 </style>

@@ -6,24 +6,22 @@
       <Candlestick :d="d" :stroke-width="0.3" :x="chartStore.x" :y="chartStore.y"/>
     </g>
   </svg> 
-  <ChartControls :pointer="pointer" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
+  <ChartControls v-if="svg" :svg="svg" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
 </template>
 
 <script setup lang="ts">
 
+import * as d3 from 'd3'
 import { ref, useTemplateRef } from 'vue'
 import Candlestick from './Candlestick.vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
 import ChartControls from './ChartControls.vue'
-import { usePointer } from '@vueuse/core'
 import { useChartStore } from './stores/chart'
 
 const chartStore = useChartStore()
 
 const svg = useTemplateRef('svg')
-
-const pointer = usePointer({target: svg})
 
 const props = defineProps({
   width: {
@@ -43,6 +41,7 @@ const props = defineProps({
     default: 40
   }
 })
+
 
 </script>
 
