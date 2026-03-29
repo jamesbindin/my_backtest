@@ -7,7 +7,6 @@ import { useChartStore } from '@/stores/chart'
 const chartStore = useChartStore()
 
 const axios: any = inject('axios')
-const data = ref([])
 const timeFrame = 'M5'
 
 function retrieveData(){
