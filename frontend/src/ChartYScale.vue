@@ -29,11 +29,6 @@ const props = defineProps({
 
 const gy = useTemplateRef('gy')
 
-const timeFrameSteps = inject('timeFrameSteps') as Record<string, number>
-const timeframe = inject('timeframe') as string
-
-const emit = defineEmits(['update:y'])
-
 function setScales(newData?: any) {
   if(!gy.value) return
   const dataToUse = newData ?? chartStore.chartData
@@ -41,7 +36,7 @@ function setScales(newData?: any) {
   const yMin = d3.min(dataToUse as Array<any>, (d) => d?.low)
   const y = d3.scaleLinear([yMax, yMin], [0, props.height - props.marginY])
   d3.select(gy.value).call(d3.axisLeft(y));
-  emit('update:y', y)
+  chartStore.updateY(y)
 }
 
 onMounted(() => {

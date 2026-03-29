@@ -1,13 +1,12 @@
 <template>
    <svg ref="svg" :width="width" :height="height">
-      <ChartXScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" @update:x="updateX"/>
-      <ChartYScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" @update:y="updateY"/>
-    <g v-if="x && y" v-for="d in chartStore.chartData" :key="d.time">
-      <Candlestick :d="d" :stroke-width="0.3" :x="x" :y="y"/>
+      <ChartXScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
+      <ChartYScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY"/>
+    <g v-if="chartStore.x && chartStore.y" v-for="d in chartStore.chartData" :key="d.time">
+      <Candlestick :d="d" :stroke-width="0.3" :x="chartStore.x" :y="chartStore.y"/>
     </g>
   </svg> 
-  <ChartControls :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
-{{ pointer }}
+  <ChartControls :pointer="pointer" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
 </template>
 
 <script setup lang="ts">
@@ -44,18 +43,6 @@ const props = defineProps({
     default: 40
   }
 })
-
-
-let y = ref();
-let x = ref();
-
-function updateX(newX: any) {
-  x.value = newX
-}
-
-function updateY(newY: any) {
-  y.value = newY
-}
 
 </script>
 

@@ -27,7 +27,6 @@ onMounted(() => {
   retrieveData()
 })
 
-
 const timeFrameSteps: Record<string, number> = {
   'M1': 60 * 1000,
   'M5': 5 * 60 * 1000,
