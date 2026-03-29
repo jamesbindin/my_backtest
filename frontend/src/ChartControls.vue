@@ -11,7 +11,6 @@ import { useChartStore } from './stores/chart'
 
 const chartStore = useChartStore()
 
-
 const props = defineProps({
     svg: {
         type: Object,
@@ -84,12 +83,18 @@ onMounted(() => {
 })
 
 watch(pointerDragDistanceX, (newDistance) => {
-    if(newDistance === null || pointerDragtStartDomain === null || pointerDragStartX.value === null) return
+    if(newDistance === null || pointerDragtStartDomain === null || pointerDragStartX.value === null || !chartStore.data || chartStore.data.length === 0) return
     const delta = chartStore.x.invert(pointerDragStartX.value) - chartStore.x.invert(pointerDragStartX.value - newDistance)
     const newStartTime = pointerDragtStartDomain[0].getTime() - delta
     const newEndTime = pointerDragtStartDomain[1].getTime() - delta
-
+    const dataStartTime = new Date(chartStore.data[0]?.time ?? 0).getTime() 
+    const dataEndTime = new Date(chartStore.data[chartStore.data.length - 1]?.time ?? 0).getTime()
+    if(newStartTime < dataStartTime || newEndTime > dataEndTime) return
     chartStore.updateX(chartStore.x.copy().domain([new Date(newStartTime), new Date(newEndTime)])) 
+    chartStore.updateChartData(chartStore.data.filter((d: any) => {
+        const time = new Date(d.time).getTime()
+        return time >= newStartTime && time <= newEndTime
+    }))
 })
 
 </script>
