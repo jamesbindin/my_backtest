@@ -5,12 +5,10 @@
 <script lang="ts" setup>
 import * as d3 from 'd3'
 import { inject, useTemplateRef, watch, onMounted } from 'vue';
+import { useChartStore } from '@/stores/chart'
+const chartStore = useChartStore()
 
 const props = defineProps({
-  data: {
-    type: [Object],
-    required: true
-  }, 
   width: {
     type: Number,
     default: 640
@@ -38,7 +36,7 @@ const emit = defineEmits(['update:y'])
 
 function setScales(newData?: any) {
   if(!gy.value) return
-  const dataToUse = newData ?? props.data
+  const dataToUse = newData ?? chartStore.chartData
   const yMax = d3.max(dataToUse as Array<any>, (d) => d?.high)
   const yMin = d3.min(dataToUse as Array<any>, (d) => d?.low)
   const y = d3.scaleLinear([yMax, yMin], [0, props.height - props.marginY])
@@ -50,7 +48,7 @@ onMounted(() => {
     setScales()
 })
 
-watch(() => props.data, (newData) => {
+watch(() => chartStore.chartData, (newData) => {
   setScales(newData)
 })
 

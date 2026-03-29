@@ -1,29 +1,32 @@
 <template>
-   <svg :width="width" :height="height">
-      <ChartXScale :data="props.data" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" @update:x="updateX"/>
-      <ChartYScale :data="props.data" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" @update:y="updateY"/>
-    <g v-if="x && y" v-for="d in data" :key="d.time">
+   <svg ref="svg" :width="width" :height="height">
+      <ChartXScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" @update:x="updateX"/>
+      <ChartYScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" @update:y="updateY"/>
+    <g v-if="x && y" v-for="d in chartStore.chartData" :key="d.time">
       <Candlestick :d="d" :stroke-width="0.3" :x="x" :y="y"/>
     </g>
   </svg> 
-  <div class="buttons flex gap-2">
-      <button class="btn" @click="$emit('step-back')">Step Back</button>
-      <button class="btn" @click="$emit('step-forward')">Step Forward</button>
-  </div>
+  <ChartControls :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
+{{ pointer }}
 </template>
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import Candlestick from './Candlestick.vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
+import ChartControls from './ChartControls.vue'
+import { usePointer } from '@vueuse/core'
+import { useChartStore } from './stores/chart'
+
+const chartStore = useChartStore()
+
+const svg = useTemplateRef('svg')
+
+const pointer = usePointer({target: svg})
 
 const props = defineProps({
-  data: {
-    type: [Object],
-    required: true
-  }, 
   width: {
     type: Number,
     default: 640
@@ -42,7 +45,6 @@ const props = defineProps({
   }
 })
 
-defineEmits(['step-back', 'step-forward'])
 
 let y = ref();
 let x = ref();
