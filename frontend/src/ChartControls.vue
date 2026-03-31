@@ -90,11 +90,22 @@ watch(pointerDragDistanceX, (newDistance) => {
     const dataStartTime = new Date(chartStore.data[0]?.time ?? 0).getTime() 
     const dataEndTime = new Date(chartStore.data[chartStore.data.length - 1]?.time ?? 0).getTime()
     if(newStartTime < dataStartTime || newEndTime > dataEndTime) return
+
     chartStore.updateX(chartStore.x.copy().domain([new Date(newStartTime), new Date(newEndTime)])) 
-    chartStore.updateChartData(chartStore.data.filter((d: any) => {
-        const time = new Date(d.time).getTime()
-        return time >= newStartTime && time <= newEndTime
-    }))
+    chartStore.updateY(chartStore.y.copy().domain([
+        d3.max(chartStore.data as Array<any>, (d) => {
+            const time = new Date(d.time).getTime()
+            if(time >= newStartTime && time <= newEndTime) return d?.high
+            else return null
+        }),
+        d3.min(chartStore.data as Array<any>, (d) => {
+            const time = new Date(d.time).getTime()
+            if(time >= newStartTime && time <= newEndTime) return d?.low
+            else return null
+        })
+    ]))
+    chartStore.updateXScaleRequiresUpdate(true)
+    chartStore.updateYScaleRequiresUpdate(true)
 })
 
 </script>

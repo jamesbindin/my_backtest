@@ -26,7 +26,7 @@
     />
 </template>
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, watch } from 'vue';
 
 const props = defineProps({
   d: {
@@ -68,4 +68,8 @@ const fillColour = (open: number, close: number): string => {
 }
 
 let barWidth = props.x((timeFrameSteps[timeframe] ?? 0) * 2) - props.x(timeFrameSteps[timeframe] ?? 0)
+
+watch(() => props.x, (newX) => {
+    barWidth = newX((timeFrameSteps[timeframe] ?? 0) * 2) - newX(timeFrameSteps[timeframe] ?? 0)
+})
 </script>

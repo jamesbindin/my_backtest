@@ -9,6 +9,9 @@ export const useChartStore = defineStore('chart', () => {
   const chartIndexRange = ref({ from: limit.value - numberOfBarsOnChart.value, to: limit.value })
   const x = ref<any>(null)
   const y = ref<any>(null)
+  const xScaleRequiresUpdate = ref(false)
+  const yScaleRequiresUpdate = ref(false)
+  const chartItemsRequireUpdate = ref(false)
 
   function updateData(newData: any) {
     data.value = newData
@@ -30,5 +33,17 @@ export const useChartStore = defineStore('chart', () => {
     y.value = newY
   }
 
-  return { chartIndexRange, chartData, limit, numberOfBarsOnChart, data, x, y, updateChartData, updateChartIndexRange, updateData, updateX, updateY }
+  function updateXScaleRequiresUpdate(newValue: boolean) {
+    xScaleRequiresUpdate.value = newValue
+  }
+
+  function updateYScaleRequiresUpdate(newValue: boolean) {
+    yScaleRequiresUpdate.value = newValue
+  }
+
+  function updateChartItemsRequireUpdate(newValue: boolean) {
+    chartItemsRequireUpdate.value = newValue
+  }
+
+  return { chartIndexRange, chartData, limit, numberOfBarsOnChart, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, updateChartData, updateChartIndexRange, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate }
 })

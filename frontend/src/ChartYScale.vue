@@ -29,6 +29,13 @@ const props = defineProps({
 
 const gy = useTemplateRef('gy')
 
+watch(() => chartStore.yScaleRequiresUpdate, () => {
+    if(!gy.value) return
+    d3.select(gy.value).call(d3.axisLeft(chartStore.y));
+    chartStore.updateYScaleRequiresUpdate(false)
+    chartStore.updateChartItemsRequireUpdate(true)
+})  
+
 function setScales(newData?: any) {
   if(!gy.value) return
   const dataToUse = newData ?? chartStore.chartData
@@ -41,10 +48,6 @@ function setScales(newData?: any) {
 
 onMounted(() => {
     setScales()
-})
-
-watch(() => chartStore.chartData, (newData) => {
-  setScales(newData)
 })
 
 </script>

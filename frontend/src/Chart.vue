@@ -2,9 +2,7 @@
    <svg ref="svg" :width="width" :height="height">
       <ChartXScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
       <ChartYScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY"/>
-    <g v-if="chartStore.x && chartStore.y" v-for="d in chartStore.chartData" :key="d.time">
-      <Candlestick :d="d" :stroke-width="0.3" :x="chartStore.x" :y="chartStore.y"/>
-    </g>
+      <ChartItems v-if="chartStore.chartData"></ChartItems>
   </svg> 
   <ChartControls v-if="svg" :svg="svg" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
 </template>
@@ -13,11 +11,12 @@
 
 import * as d3 from 'd3'
 import { ref, useTemplateRef } from 'vue'
-import Candlestick from './Candlestick.vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
 import ChartControls from './ChartControls.vue'
+import ChartItems from './ChartItems.vue'
 import { useChartStore } from './stores/chart'
+
 
 const chartStore = useChartStore()
 

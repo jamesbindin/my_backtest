@@ -35,18 +35,16 @@ const gx = useTemplateRef('gx')
 const timeFrameSteps = inject('timeFrameSteps') as Record<string, number>
 const timeframe = inject('timeframe') as string
 
-watch(() => chartStore.chartData, (newData) => {
-  setScales(newData)
+watch(() => chartStore.xScaleRequiresUpdate, () => {
+    if(!gx.value) return
+    d3.select(gx.value).call(d3.axisBottom(chartStore.x));
+    chartStore.updateXScaleRequiresUpdate(false)
+    chartStore.updateChartItemsRequireUpdate(true)
 })
 
-watch(() => chartStore.x, (newX) => {
+function setScales(newData?: any) {
+  const dataToUse = newData ?? chartStore.chartData
     if(!gx.value) return
-    d3.select(gx.value).call(d3.axisBottom(newX));
-})
-
-function setScales(this: any, newData?: any) {
-    if(!gx.value) return
-    const dataToUse = newData ?? chartStore.chartData
     const x = d3.scaleUtc([new Date(dataToUse[0].time).getTime() - (timeFrameSteps[timeframe] ?? 0), new Date(dataToUse[dataToUse.length - 1].time)], [props.marginX, props.width])
     d3.select(gx.value).call(d3.axisBottom(x));
     chartStore.updateX(x)
