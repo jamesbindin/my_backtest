@@ -1,6 +1,6 @@
 <template>
     <g v-if="chartStore.x && chartStore.y" v-for="d in chartStore.chartData" :key="d.time">
-      <Candlestick :d="d" :stroke-width="0.3" :x="chartStore.x" :y="chartStore.y"/>
+      <Candlestick :d="d" :stroke-width="1" :x="chartStore.x" :y="chartStore.y"/>
     </g>
 </template>
 <script lang="ts" setup>

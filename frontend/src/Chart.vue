@@ -1,10 +1,10 @@
 <template>
-   <svg ref="svg" :width="width" :height="height">
+    <ChartControls v-if="svg" :svg="svg" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
+    <svg ref="svg" :width="width" :height="height">
       <ChartXScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
       <ChartYScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY"/>
       <ChartItems v-if="chartStore.chartData"></ChartItems>
-  </svg> 
-  <ChartControls v-if="svg" :svg="svg" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
+    </svg> 
 </template>
 
 <script setup lang="ts">
