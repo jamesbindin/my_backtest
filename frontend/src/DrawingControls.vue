@@ -50,6 +50,7 @@ const updateCursorMode = (event: Event) => {
 
     if(target.value === cursorModeEnum.PAN) {
         useCursorMode.value = usePanMode
+        tearDownCursorMode  = useCursorMode.value()
     }    
     
     controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum])
