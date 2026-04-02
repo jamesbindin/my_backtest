@@ -53,7 +53,7 @@ provide('barColours', barColours)
 </script>
 <template>
   <div class="flex flex-col items-center content-center gap-4">
-    <ChartControls v-if="chartStore.svgTemplateRef" :svg="chartStore.svgTemplateRef"/>
+    <ChartControls v-if="chartStore.svgTemplateRef"/>
     <div class="w-11/12 h-11/12 border p-4">
       <Chart v-if="chartStore.chartData.length" :margin-x="34" :margin-y="20"/>
     </div>

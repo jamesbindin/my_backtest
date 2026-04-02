@@ -15,10 +15,6 @@ import { useControlsStore } from './stores/controls'
 const chartStore = useChartStore()
 
 const props = defineProps({
-    svg: {
-        type: Object,
-        required: true
-    },
     width: {
         type: Number,
         default: 640
@@ -29,31 +25,29 @@ const props = defineProps({
     },
 })
 
-
-
 let pointerDown = ref(false)
 let pointerDragStartX = ref<number | null>(null)
 let pointerDragDistanceX = ref<number | null>(null)
 let pointerDragtStartDomain: [Date, Date] | null = null
 
 onMounted(() => {
-    props.svg?.addEventListener('pointerdown', (event: PointerEvent) => {
+    chartStore.svgTemplateRef?.addEventListener('pointerdown', (event: PointerEvent) => {
         event.preventDefault()
         pointerDown.value = true
         pointerDragStartX.value = event.clientX
         pointerDragtStartDomain = chartStore.x.domain()
     })
-    props.svg?.addEventListener('pointermove', (event: PointerEvent) => {
+    chartStore.svgTemplateRef?.addEventListener('pointermove', (event: PointerEvent) => {
         event.preventDefault()
         if(pointerDown.value) {
             pointerDragDistanceX.value = event.clientX - (pointerDragStartX.value ?? event.clientX)
         }
     })
-    props.svg?.addEventListener('pointerup', (event: PointerEvent) => {
+    chartStore.svgTemplateRef?.addEventListener('pointerup', (event: PointerEvent) => {
         event.preventDefault()
         pointerDown.value = false
     })
-    props.svg?.addEventListener('pointercancel', (event: PointerEvent) => {
+    chartStore.svgTemplateRef?.addEventListener('pointercancel', (event: PointerEvent) => {
         event.preventDefault()
         pointerDown.value = false
     })
