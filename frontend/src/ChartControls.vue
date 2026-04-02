@@ -25,56 +25,6 @@ const props = defineProps({
     },
 })
 
-let pointerDown = ref(false)
-let pointerDragStartX = ref<number | null>(null)
-let pointerDragDistanceX = ref<number | null>(null)
-let pointerDragtStartDomain: [Date, Date] | null = null
-
-onMounted(() => {
-    chartStore.svgTemplateRef?.addEventListener('pointerdown', (event: PointerEvent) => {
-        event.preventDefault()
-        pointerDown.value = true
-        pointerDragStartX.value = event.clientX
-        pointerDragtStartDomain = chartStore.x.domain()
-    })
-    chartStore.svgTemplateRef?.addEventListener('pointermove', (event: PointerEvent) => {
-        event.preventDefault()
-        if(pointerDown.value) {
-            pointerDragDistanceX.value = event.clientX - (pointerDragStartX.value ?? event.clientX)
-        }
-    })
-    chartStore.svgTemplateRef?.addEventListener('pointerup', (event: PointerEvent) => {
-        event.preventDefault()
-        pointerDown.value = false
-    })
-    chartStore.svgTemplateRef?.addEventListener('pointercancel', (event: PointerEvent) => {
-        event.preventDefault()
-        pointerDown.value = false
-    })
-})
-
-watch(pointerDragDistanceX, (newDistance) => {
-    if(newDistance === null || pointerDragtStartDomain === null || pointerDragStartX.value === null || !chartStore.data || chartStore.data.length === 0) return
-    const delta = chartStore.x.invert(pointerDragStartX.value) - chartStore.x.invert(pointerDragStartX.value - newDistance)
-    const newStartTime = pointerDragtStartDomain[0].getTime() - delta
-    const newEndTime = pointerDragtStartDomain[1].getTime() - delta
-
-    chartStore.updateX(chartStore.x.copy().domain([new Date(newStartTime), new Date(newEndTime)])) 
-    chartStore.updateY(chartStore.y.copy().domain([
-        d3.max(chartStore.data as Array<any>, (d) => {
-            const time = new Date(d.time).getTime()
-            if(time >= newStartTime && time <= newEndTime) return d?.high
-            else return null
-        }),
-        d3.min(chartStore.data as Array<any>, (d) => {
-            const time = new Date(d.time).getTime()
-            if(time >= newStartTime && time <= newEndTime) return d?.low
-            else return null
-        })
-    ]))
-    chartStore.updateXScaleRequiresUpdate(true)
-    chartStore.updateYScaleRequiresUpdate(true)
-})
 
 </script>
 <style scoped>

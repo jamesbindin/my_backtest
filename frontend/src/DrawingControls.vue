@@ -19,6 +19,7 @@
         class="theme-controller text-nowrap w-full btn btn-sm btn-block btn-ghost justify-start"
         :aria-label="mode.label"
         :value="mode.value" 
+        :checked="mode.default"
         @change="updateCursorMode"/>
     </li>
   </ul>
@@ -26,20 +27,40 @@
 </template>
 <script lang="ts" setup>
 import { useControlsStore } from './stores/controls'
+import { usePanMode } from './panMode'
+import { onMounted, watch, ref } from 'vue'
 
 const controlsStore = useControlsStore()
 const cursorModeEnum = controlsStore.CursorModeEnum
 
 const modes = [
-    {label: 'Pan', value: cursorModeEnum.PAN},
+    {label: 'Pan', value: cursorModeEnum.PAN, default: true},
     {label: 'Horizontal Line', value: cursorModeEnum.HORIZONTAL_LINE}
 ]
+
+var useCursorMode = ref(usePanMode)
+var tearDownCursorMode: Function | null = null
 
 
 const updateCursorMode = (event: Event) => {
     const target = event.target as HTMLInputElement
+    if(tearDownCursorMode) {
+        tearDownCursorMode()
+    }
+
+    if(target.value === cursorModeEnum.PAN) {
+        useCursorMode.value = usePanMode
+    }    
+    
     controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum])
+
 }
+
+onMounted(() => {
+     tearDownCursorMode  = useCursorMode.value()
+})
+
+
 
 
 
