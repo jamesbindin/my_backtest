@@ -49,7 +49,9 @@ provide('barColours', barColours)
 
 </script>
 <template>
-  <Chart v-if="chartStore.chartData.length" :width="1200" :height="600" :margin-x="50" :margin-y="50" />
+  <div class="w-screen h-screen">
+    <Chart v-if="chartStore.chartData.length" :margin-x="60" :margin-y="10"/>
+  </div>
   <Tooltips />
 </template>
 

@@ -26,14 +26,6 @@ const props = defineProps({
         type: Number,
         default: 400
     },
-    marginX: {
-        type: Number,
-        default: 40
-    },
-    marginY: {
-        type: Number,
-        default: 40
-    }
 })
 
 function stepBack() {
@@ -89,9 +81,6 @@ watch(pointerDragDistanceX, (newDistance) => {
     const delta = chartStore.x.invert(pointerDragStartX.value) - chartStore.x.invert(pointerDragStartX.value - newDistance)
     const newStartTime = pointerDragtStartDomain[0].getTime() - delta
     const newEndTime = pointerDragtStartDomain[1].getTime() - delta
-    const dataStartTime = new Date(chartStore.data[0]?.time ?? 0).getTime() 
-    const dataEndTime = new Date(chartStore.data[chartStore.data.length - 1]?.time ?? 0).getTime()
-    if(newStartTime < dataStartTime || newEndTime > dataEndTime) return
 
     chartStore.updateX(chartStore.x.copy().domain([new Date(newStartTime), new Date(newEndTime)])) 
     chartStore.updateY(chartStore.y.copy().domain([

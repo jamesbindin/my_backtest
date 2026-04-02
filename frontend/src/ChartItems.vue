@@ -27,7 +27,6 @@ function updateChartData() {
             const time = new Date(d.time).getTime()
             return time >= chartStore.x.domain()[0].getTime() && time <= chartStore.x.domain()[1].getTime()
         })
-        console.log(filteredData)
         chartStore.updateChartData(filteredData)
     }
 

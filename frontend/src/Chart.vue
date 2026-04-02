@@ -1,24 +1,25 @@
 <template>
-    <ChartControls v-if="svg" :svg="svg" :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
-    <div ref="chart-container">
-      <svg ref="svg" :width="width" :height="height">
-        <ChartXScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY" />
-        <ChartYScale :width="props.width" :height="props.height" :margin-x="props.marginX" :margin-y="props.marginY"/>
+    <!-- <ChartControls v-if="svg" :svg="svg"/> -->
+    <div ref="chart-container" class="w-full h-full">
+      <template v-if="containerWidth && containerHeight">
+      <svg ref="svg" width="100%" height="100%" :viewBox="`0 0 ${containerWidth + props.marginX} ${containerHeight + props.marginY}`">
+        <ChartXScale :width="containerWidth" :height="containerHeight"/>
+        <ChartYScale :width="containerWidth" :height="containerHeight"/>
         <ChartItems v-if="chartStore.chartData"></ChartItems>
       </svg> 
+      </template>
     </div>
 </template>
 
 <script setup lang="ts">
 
 import * as d3 from 'd3'
-import { onMounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
 import ChartControls from './ChartControls.vue'
 import ChartItems from './ChartItems.vue'
 import { useChartStore } from './stores/chart'
-
 
 const chartStore = useChartStore()
 
@@ -32,14 +33,6 @@ onMounted(() => {
 })
 
 const props = defineProps({
-  width: {
-    type: Number,
-    default: 640
-  },
-  height: {
-    type: Number,
-    default: 400
-  },
   marginX: {
     type: Number,
     default: 40
@@ -48,6 +41,15 @@ const props = defineProps({
     type: Number,
     default: 40
   }
+})
+
+const containerWidth = computed(() => {
+  return 1020;
+})
+
+const containerHeight = computed(() => {
+  return 600;
+    // return chartContainer.value?.clientHeight ?? 0; 
 })
 
 

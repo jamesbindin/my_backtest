@@ -1,5 +1,5 @@
 <template>
-    <g ref="gy" :transform="`translate(${props.marginX}, 0)`" stroke-width="0.5"></g>
+    <g ref="gy" :transform="`translate(${props.width}, 0)`" stroke-width="0.5"></g>
 </template>
 
 <script lang="ts" setup>
@@ -16,14 +16,6 @@ const props = defineProps({
   height: {
     type: Number,
     default: 400
-  },
-  marginX: {
-    type: Number,
-    default: 40
-  },
-  marginY: {
-    type: Number,
-    default: 40
   }
 })
 
@@ -31,7 +23,7 @@ const gy = useTemplateRef('gy')
 
 watch(() => chartStore.yScaleRequiresUpdate, () => {
     if(!gy.value) return
-    d3.select(gy.value).call(d3.axisLeft(chartStore.y));
+    d3.select(gy.value).call(d3.axisRight(chartStore.y));
     chartStore.updateYScaleRequiresUpdate(false)
     chartStore.updateChartItemsRequireUpdate(true)
 })  
@@ -41,8 +33,8 @@ function setScales(newData?: any) {
   const dataToUse = newData ?? chartStore.chartData
   const yMax = d3.max(dataToUse as Array<any>, (d) => d?.high)
   const yMin = d3.min(dataToUse as Array<any>, (d) => d?.low)
-  const y = d3.scaleLinear([yMax, yMin], [0, props.height - props.marginY])
-  d3.select(gy.value).call(d3.axisLeft(y));
+  const y = d3.scaleLinear([yMax, yMin], [0, props.height])
+  d3.select(gy.value).call(d3.axisRight(y));
   chartStore.updateY(y)
 }
 
