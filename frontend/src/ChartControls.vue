@@ -1,7 +1,6 @@
 <template>
   <div class="buttons flex gap-4">
-      <button class="btn" @click="stepBack">Step Back</button>
-      <button class="btn" @click="stepForward">Step Forward</button>
+    <DrawingControls></DrawingControls>
       <DaisyUiThemeSelector></DaisyUiThemeSelector>
   </div>
 </template>
@@ -10,6 +9,8 @@ import * as d3 from 'd3'
 import { onMounted, watch, ref } from 'vue'
 import { useChartStore } from './stores/chart'
 import DaisyUiThemeSelector from './DaisyUiThemeSelector.vue'
+import DrawingControls from './DrawingControls.vue'
+import { useControlsStore } from './stores/controls'
 
 const chartStore = useChartStore()
 
@@ -28,25 +29,7 @@ const props = defineProps({
     },
 })
 
-function stepBack() {
-  if(chartStore.chartIndexRange.from <= 0) return
-    chartStore.updateChartIndexRange({
-        from: chartStore.chartIndexRange.from - 1,
-        to: chartStore.chartIndexRange.to - 1
-    })
-    let chartData = chartStore.data.slice(chartStore.chartIndexRange.from, chartStore.chartIndexRange.to)
-    chartStore.updateChartData(chartData)
-}
 
-function stepForward() {
-  if(chartStore.chartIndexRange.to >= chartStore.data.length) return
-    chartStore.updateChartIndexRange({
-        from: chartStore.chartIndexRange.from + 1,
-        to: chartStore.chartIndexRange.to + 1
-    })
-  let chartData = chartStore.data.slice(chartStore.chartIndexRange.from, chartStore.chartIndexRange.to)
-  chartStore.updateChartData(chartData)
-}
 
 let pointerDown = ref(false)
 let pointerDragStartX = ref<number | null>(null)

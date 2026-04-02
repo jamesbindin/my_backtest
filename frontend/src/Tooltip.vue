@@ -27,7 +27,6 @@ function calculateTooltipPosition() {
     const viewportHeight = window.innerHeight
     let positionX = props.position.x
     let positionY = props.position.y
-    console.log(positionX)
     if(positionX + tooltipWidth > viewportWidth) {
         positionX = viewportWidth - tooltipWidth - 10
     } 

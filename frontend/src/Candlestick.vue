@@ -78,7 +78,6 @@ watch(() => props.x, (newX) => {
 })
 
 function candlestickMouseOver(event: MouseEvent) {
-    console.log(event)
     tooltipStore.updateTooltips([{
         paragraphs: [
             `Time: ${new Date(props.d.time).toLocaleString()}`,
