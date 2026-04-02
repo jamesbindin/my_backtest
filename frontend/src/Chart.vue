@@ -1,5 +1,4 @@
 <template>
-    <!-- <ChartControls v-if="svg" :svg="svg"/> -->
     <div ref="chart-container" class="w-full h-full">
       <template v-if="containerWidth && containerHeight">
       <svg ref="svg" width="100%" height="100%" :viewBox="`0 0 ${containerWidth + props.marginX} ${containerHeight + props.marginY}`">
@@ -17,7 +16,6 @@ import * as d3 from 'd3'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
-import ChartControls from './ChartControls.vue'
 import ChartItems from './ChartItems.vue'
 import { useChartStore } from './stores/chart'
 
@@ -27,6 +25,9 @@ const svg = useTemplateRef('svg')
 const chartContainer = useTemplateRef('chart-container')
 
 onMounted(() => {
+    if(svg.value) {
+        chartStore.setSvgTemplateRef(svg.value)
+    }
     if(chartContainer.value) {
         chartStore.setChartContainer(chartContainer.value)
     }

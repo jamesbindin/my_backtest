@@ -13,6 +13,7 @@ export const useChartStore = defineStore('chart', () => {
   const yScaleRequiresUpdate = ref(false)
   const chartItemsRequireUpdate = ref(false)
   const chartContainer = ref<HTMLElement | null>(null)
+  const svgTemplateRef = ref<SVGSVGElement | null>(null)
 
   function updateData(newData: any) {
     data.value = newData
@@ -50,5 +51,9 @@ export const useChartStore = defineStore('chart', () => {
     chartContainer.value = element
   }
 
-  return { chartIndexRange, chartData, limit, numberOfBarsOnChart, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, chartContainer, updateChartData, updateChartIndexRange, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate, setChartContainer }
+  function setSvgTemplateRef(element: SVGSVGElement) {
+    svgTemplateRef.value = element
+  }
+
+  return { chartIndexRange, chartData, limit, numberOfBarsOnChart, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, chartContainer, svgTemplateRef, updateChartData, updateChartIndexRange, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate, setChartContainer, setSvgTemplateRef }
 })

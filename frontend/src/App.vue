@@ -4,6 +4,7 @@ import { inject, ref } from 'vue'
 import Chart from './Chart.vue'
 import { useChartStore } from '@/stores/chart'
 import Tooltips from './Tooltips.vue'
+import ChartControls from './ChartControls.vue'
 
 const chartStore = useChartStore()
 
@@ -47,12 +48,18 @@ provide('timeFrameSteps', timeFrameSteps)
 provide('timeframe', timeFrame)
 provide('barColours', barColours)
 
+
+
 </script>
 <template>
-  <div class="w-screen h-screen">
-    <Chart v-if="chartStore.chartData.length" :margin-x="60" :margin-y="10"/>
+  <div class="flex flex-col items-center content-center gap-4">
+    <ChartControls v-if="chartStore.svgTemplateRef" :svg="chartStore.svgTemplateRef"/>
+    <div class="w-11/12 h-11/12 border p-4">
+      <Chart v-if="chartStore.chartData.length" :margin-x="34" :margin-y="20"/>
+    </div>
   </div>
   <Tooltips />
+  
 </template>
 
 <style>

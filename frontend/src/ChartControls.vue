@@ -1,5 +1,5 @@
 <template>
-  <div class="buttons flex gap-2">
+  <div class="buttons flex gap-4">
       <button class="btn" @click="stepBack">Step Back</button>
       <button class="btn" @click="stepForward">Step Forward</button>
       <DaisyUiThemeSelector></DaisyUiThemeSelector>
