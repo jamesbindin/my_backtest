@@ -3,6 +3,7 @@ import { onMounted, provide } from 'vue'
 import { inject, ref } from 'vue'
 import Chart from './Chart.vue'
 import { useChartStore } from '@/stores/chart'
+import Tooltips from './Tooltips.vue'
 
 const chartStore = useChartStore()
 
@@ -49,6 +50,7 @@ provide('barColours', barColours)
 </script>
 <template>
   <Chart v-if="chartStore.chartData.length" :width="1200" :height="600" :margin-x="50" :margin-y="50" />
+  <Tooltips />
 </template>
 
 <style>

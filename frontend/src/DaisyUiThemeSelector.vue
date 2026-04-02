@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
 let daisyUiThemes = [
     'default',
     'light',
@@ -64,24 +63,6 @@ let daisyUiThemes = [
     'abiss',
     'silk'
 ]
-onMounted(() => {
-var themes = document.querySelectorAll('.theme-controller') as NodeListOf<HTMLInputElement>
-    console.log(themes)
-
-})
-// var themes: NodeListOf<HTMLInputElement>
-// onMounted(() => {
-    // themeControllers = document.querySelectorAll('.theme-controller') as NodeListOf<HTMLInputElement>
-    // themeControllers.forEach(controller => {
-        // console.log(controller.value)
-        // controller.addEventListener('change', (e) => {
-            // const target = e.target as HTMLInputElement
-            // if(target.checked) {
-                // document.documentElement.setAttribute('data-theme', target.value)
-            // }
-        // })
-    // })
-// })
 
 </script>
 <style scoped>
