@@ -18,7 +18,8 @@
         name="theme-dropdown"
         class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
         :aria-label="theme"
-        :value="theme" />
+        :value="theme"
+        @change="event => (event.target as HTMLInputElement).blur()"/>
     </li>
   </ul>
 </div>

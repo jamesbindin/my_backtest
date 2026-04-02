@@ -15,8 +15,8 @@
     <li v-for="mode in modes" :key="mode.value">
       <input
         type="radio"
-        name="theme-dropdown"
-        class="theme-controller text-nowrap w-full btn btn-sm btn-block btn-ghost justify-start"
+        name="drawing-controls-dropdown"
+        class="text-nowrap w-full btn btn-sm btn-block btn-ghost justify-start"
         :aria-label="mode.label"
         :value="mode.value" 
         :checked="mode.default"
@@ -28,21 +28,23 @@
 <script lang="ts" setup>
 import { useControlsStore } from './stores/controls'
 import { usePanMode } from './panMode'
+import { useHorizontalLineMode } from './horizontalLineMode'
 import { onMounted, watch, ref } from 'vue'
 
 const controlsStore = useControlsStore()
 const cursorModeEnum = controlsStore.CursorModeEnum
 
 const modes = [
-    {label: 'Pan', value: cursorModeEnum.PAN, default: true},
-    {label: 'Horizontal Line', value: cursorModeEnum.HORIZONTAL_LINE}
+    {label: 'Pan', value: cursorModeEnum.PAN, composable: usePanMode},
+    {label: 'Horizontal Line', value: cursorModeEnum.HORIZONTAL_LINE, composable: useHorizontalLineMode, default: true}
 ]
 
-var useCursorMode = ref(usePanMode)
+var useCursorMode = ref(modes.find(m => m.default)?.composable ?? usePanMode)
 var tearDownCursorMode: Function | null = null
 
 
 const updateCursorMode = (event: Event) => {
+
     const target = event.target as HTMLInputElement
     if(tearDownCursorMode) {
         tearDownCursorMode()
@@ -50,19 +52,18 @@ const updateCursorMode = (event: Event) => {
 
     if(target.value === cursorModeEnum.PAN) {
         useCursorMode.value = usePanMode
-        tearDownCursorMode  = useCursorMode.value()
+    } else if(target.value === cursorModeEnum.HORIZONTAL_LINE) {
+        useCursorMode.value = useHorizontalLineMode
     }    
-    
-    controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum])
 
+    controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum])
+    tearDownCursorMode  = useCursorMode.value()
+    target.blur()
 }
 
 onMounted(() => {
      tearDownCursorMode  = useCursorMode.value()
 })
-
-
-
 
 
 </script>
