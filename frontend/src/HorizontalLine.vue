@@ -22,7 +22,6 @@ const props = defineProps({
 const chartStore = useChartStore()
 
 function convertPriceToY(price: number) {
-    console.log(price)
     if(chartStore.y) {
         return chartStore.y(price)
     }

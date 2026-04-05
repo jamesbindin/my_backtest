@@ -1,7 +1,7 @@
 <template>
     <div ref="chart-container" class="w-full h-full">
       <template v-if="containerWidth && containerHeight">
-      <svg ref="svg" :viewBox="`0 0 ${containerWidth + props.marginX} ${containerHeight + props.marginY}`">
+      <svg ref="svg" :viewBox="`0 0 ${containerWidth + props.marginX} ${containerHeight + props.marginY}`" class="touch-none">
         <ChartXScale :width="containerWidth" :height="containerHeight"/>
         <ChartYScale :width="containerWidth" :height="containerHeight"/>
         <ChartItems v-if="chartStore.chartData"></ChartItems>

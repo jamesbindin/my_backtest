@@ -2,14 +2,14 @@
     <g v-if="chartStore.x && chartStore.y" v-for="d in chartStore.chartData" :key="d.time">
       <Candlestick :d="d" :stroke-width="1" :x="chartStore.x" :y="chartStore.y"/>
     </g>
-    <HorizontalLine v-for="line in horizontalLinesStore.horizontalLines" :key="line.id" :horizontalLine="line" />
+    <HorizontalLine v-for="line in horizontalLinesStore.horizontalLines" :key="line.uuid" :horizontalLine="line" />
 </template>
 <script lang="ts" setup>
 import { useChartStore } from './stores/chart';
 import Candlestick from './Candlestick.vue'
 import { watch, ref } from 'vue';
 import HorizontalLine from './HorizontalLine.vue'
-import { useHorizontalLinesStore } from './stores/shapes';
+import { useHorizontalLinesStore } from './stores/horizontalLine';
 
 const chartStore = useChartStore()
 const horizontalLinesStore = useHorizontalLinesStore()

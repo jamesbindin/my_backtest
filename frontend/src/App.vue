@@ -49,7 +49,6 @@ provide('timeframe', timeFrame)
 provide('barColours', barColours)
 
 
-
 </script>
 <template>
   <div class="flex flex-col items-center content-center gap-4">

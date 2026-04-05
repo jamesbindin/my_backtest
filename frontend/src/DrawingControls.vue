@@ -12,14 +12,14 @@
     </svg>
   </div>
   <ul tabindex="-1" class="dropdown-content bg-base-300 rounded-box z-1 p-2 shadow-2xl overflow-y-auto">
-    <li v-for="mode in modes" :key="mode.value">
+    <li v-for="modeKey in modeKeys" :key="modeKey">
       <input
         type="radio"
         name="drawing-controls-dropdown"
         class="text-nowrap w-full btn btn-sm btn-block btn-ghost justify-start"
-        :aria-label="mode.label"
-        :value="mode.value" 
-        :checked="mode.default"
+        :aria-label="modes[modeKey]?.label"
+        :value="modeKey" 
+        :checked="modes[modeKey]?.active"
         @change="updateCursorMode"/>
     </li>
   </ul>
@@ -29,37 +29,53 @@
 import { useControlsStore } from './stores/controls'
 import { usePanMode } from './panMode'
 import { useHorizontalLineMode } from './horizontalLineMode'
-import { onMounted, watch, ref } from 'vue'
+import { onMounted, watch, ref  } from 'vue'
 
 const controlsStore = useControlsStore()
 const cursorModeEnum = controlsStore.CursorModeEnum
 
-const modes = [
-    {label: 'Pan', value: cursorModeEnum.PAN, composable: usePanMode},
-    {label: 'Horizontal Line', value: cursorModeEnum.HORIZONTAL_LINE, composable: useHorizontalLineMode, default: true}
-]
+// const modes: Record<string, {label: string; composable: Function; active: boolean}> = {}
+// const modes : Record<string, {label: string; composable: Function; active: boolean}> = {}
+// const modes: Record<string, {label: string; composable: Function; active: boolean}>> = ref({
+//     [cursorModeEnum.PAN]: {label: 'Pan',  composable: usePanMode, active: false},
+//     [cursorModeEnum.HORIZONTAL_LINE]: {label: 'Horizontal Line', composable: useHorizontalLineMode, active: true}
+// })
 
-var useCursorMode = ref(modes.find(m => m.default)?.composable ?? usePanMode)
+const modes = ref({
+    [cursorModeEnum.PAN]: {label: 'Pan',  composable: usePanMode, active: false},
+    [cursorModeEnum.HORIZONTAL_LINE]: {label: 'Horizontal Line', composable: useHorizontalLineMode, active: true}
+})
+
+
+const modeKeys = Object.keys(modes.value) as (keyof typeof modes.value)[]
+
+var useCursorMode = ref(Object.values(modes.value).find(m => m.active)?.composable || usePanMode)
 var tearDownCursorMode: Function | null = null
 
 
 const updateCursorMode = (event: Event) => {
-
     const target = event.target as HTMLInputElement
+    controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum])
+    target.blur()
+}
+
+watch(() => controlsStore.cursorMode, (newMode) => {
+    console.log('Cursor mode changed to:', newMode)
     if(tearDownCursorMode) {
         tearDownCursorMode()
     }
 
-    if(target.value === cursorModeEnum.PAN) {
-        useCursorMode.value = usePanMode
-    } else if(target.value === cursorModeEnum.HORIZONTAL_LINE) {
-        useCursorMode.value = useHorizontalLineMode
-    }    
+    Object.keys(modes.value).forEach(key => {
+        if(!modes.value[key as keyof typeof modes.value]) return
+        modes.value[key as keyof typeof modes.value].active = key === newMode
+    })
 
-    controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum])
-    tearDownCursorMode  = useCursorMode.value()
-    target.blur()
-}
+    const mode = modes.value[newMode]
+    if(mode) {
+        useCursorMode.value = mode.composable
+        tearDownCursorMode  = useCursorMode.value()
+    }
+})
 
 onMounted(() => {
      tearDownCursorMode  = useCursorMode.value()

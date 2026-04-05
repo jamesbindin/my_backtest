@@ -9,7 +9,7 @@ export const useControlsStore = defineStore('controls', () => {
     HORIZONTAL_LINE = 'horizontal_line',
   }
 
-  const cursorMode = ref<CursorModeEnum>(CursorModeEnum.PAN)
+  const cursorMode = ref<CursorModeEnum>(CursorModeEnum.HORIZONTAL_LINE)
   
   function updatePointerDragDistanceX(newDistance: number | null) {
     pointerDragDistanceX.value = newDistance

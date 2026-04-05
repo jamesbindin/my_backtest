@@ -36,8 +36,6 @@ watch(() => chartStore.xScaleRequiresUpdate, () => {
 })
 
 function setScales(newData?: any) {
-  console.log(props.width)
-  console.log(props.height)
   const dataToUse = newData ?? chartStore.chartData
     if(!gx.value) return
     const x = d3.scaleUtc([new Date(dataToUse[0].time).getTime() - (timeFrameSteps[timeframe] ?? 0), new Date(dataToUse[dataToUse.length - 1].time)], [0, props.width])
