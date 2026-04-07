@@ -16,76 +16,78 @@
     <li v-for="modeKey in modeKeys" :key="modeKey">
       <input
         type="radio"
-        name="drawing-controls-dropdown"
+        name="cursor-controls-dropdown"
         class="text-nowrap w-full btn btn-sm btn-block btn-ghost justify-start"
         :aria-label="modes[modeKey]?.label"
         :value="modeKey" 
         :checked="modes[modeKey]?.active"
-        @change="updateDrawingMode"/>
+        @change="updateCursorMode"/>
     </li>
   </ul>
 </div>
 </template>
 <script lang="ts" setup>
 import { useControlsStore } from './stores/controls'
-import { useHorizontalLineMode } from './horizontalLineMode'
+import { usePanMode } from './panMode'
+import { useCrosshairMode } from './crosshairMode'
 import { onMounted, watch, ref  } from 'vue'
 
 const controlsStore = useControlsStore()
-const drawingModeEnum = controlsStore.DrawingModeEnum
+const cursorModeEnum = controlsStore.cursorModeEnum
 
 
 const modes = ref({
-    [drawingModeEnum.NONE]: {label: 'None',  composable: () => {}, active: true},
-    [drawingModeEnum.HORIZONTAL_LINE]: {label: 'Horizontal Line', composable: useHorizontalLineMode, active: false}
+    [cursorModeEnum.PAN]: {label: 'Pan',  composable: usePanMode, active: true},
+    [cursorModeEnum.CROSSHAIR]: {label: 'Crosshair', composable: useCrosshairMode, active: false}
 })
 
 
 const modeKeys = Object.keys(modes.value) as (keyof typeof modes.value)[]
 
-var useDrawingMode = ref(Object.values(modes.value).find(m => m.active)?.composable || (() => {}))
-var tearDownDrawingMode: Function | null = null
+var useCursorMode = ref(Object.values(modes.value).find(m => m.active)?.composable || (() => {}))
+var tearDownCursorMode: Function | null = null
 
 function dropdownLabel() {
-  if(controlsStore.drawingMode === drawingModeEnum.NONE) {
-    return 'Drawing Mode'
+  if(controlsStore.cursorMode === cursorModeEnum.PAN) {
+    return 'Pan'
   }
   const activeMode = Object.values(modes.value).find(m => m.active)
-  return activeMode ? activeMode.label : 'Drawing Mode'
+  return activeMode ? activeMode.label : 'Cursor Mode'
 }
 
-const callDrawingMode = () => {
-    const result = useDrawingMode.value()
+const callCursorMode = () => {
+    const result = useCursorMode.value()
     return typeof result === 'function' ? result : null
 }
 
 
-const updateDrawingMode = (event: Event) => {
+const updateCursorMode = (event: Event) => {
     const target = event.target as HTMLInputElement
-    controlsStore.setDrawingMode(target.value as typeof drawingModeEnum[keyof typeof drawingModeEnum  ])
+    controlsStore.setCursorMode(target.value as typeof cursorModeEnum[keyof typeof cursorModeEnum  ])
     target.blur()
 }
 
-watch(() => controlsStore.drawingMode, (newMode) => {
-    console.log('Drawing mode changed to:', newMode)
-    if(tearDownDrawingMode) {
-        tearDownDrawingMode()
+watch(() => controlsStore.cursorMode, (newMode) => {
+    console.log('Cursor mode changed to:', newMode)
+    if(tearDownCursorMode) {
+        tearDownCursorMode()
     }
 
     Object.keys(modes.value).forEach(key => {
-        if(!modes.value[key as keyof typeof modes.value]) return
-        modes.value[key as keyof typeof modes.value].active = key === newMode
+        const mode = modes.value[key as keyof typeof modes.value]
+        if(!mode) return
+        mode.active = key === newMode
     })
 
     const mode = modes.value[newMode]
     if(mode) {
-        useDrawingMode.value = mode.composable
-        tearDownDrawingMode  = callDrawingMode()
+        useCursorMode.value = mode.composable
+        tearDownCursorMode  = callCursorMode()
     }
 })
 
 onMounted(() => {
-     tearDownDrawingMode  = callDrawingMode()
+     tearDownCursorMode  = callCursorMode()
 })
 
 

@@ -15,6 +15,7 @@ export const useChartStore = defineStore('chart', () => {
   const chartContainer = ref<HTMLElement | null>(null)
   const svgTemplateRef = ref<SVGSVGElement | null>(null)
 
+
   function updateData(newData: any) {
     data.value = newData
   }

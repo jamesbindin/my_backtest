@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 
-import * as d3 from 'd3'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'

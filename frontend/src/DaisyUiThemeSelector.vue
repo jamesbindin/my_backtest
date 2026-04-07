@@ -1,7 +1,7 @@
 <template>
-  <div class="dropdown dropdown-hover">
-  <div tabindex="0" role="button" class="btn">
-    Theme
+  <div class="dropdown">
+  <div tabindex="0" role="button" class="btn" >
+    <p>Theme</p>
     <svg
       width="12px"
       height="12px"
@@ -19,15 +19,22 @@
         class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
         :aria-label="theme"
         :value="theme"
-        @change="event => (event.target as HTMLInputElement).blur()"/>
+        :checked="controlsStore.theme === theme"
+        @change="event => setTheme(event)"/>
     </li>
   </ul>
 </div>
 </template>
 
 <script lang="ts" setup>
+import { useControlsStore } from './stores/controls'
+import { useTemplateRef } from 'vue'
+
+const controlsStore = useControlsStore()
+
+const dropdown = useTemplateRef('dropdown')
+
 let daisyUiThemes = [
-    'default',
     'light',
     'dark', 
     'cupcake',
@@ -65,6 +72,15 @@ let daisyUiThemes = [
     'silk'
 ]
 
+
+
+function setTheme(event: Event) {
+    const theme = (event.target as HTMLInputElement).value;
+    controlsStore.setTheme(theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    (event.target as HTMLInputElement).blur();
+
+}
+
 </script>
-<style scoped>
-</style>
+<style scoped></style>

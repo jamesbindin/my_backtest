@@ -1,5 +1,6 @@
 <template>
   <div class="buttons flex gap-4">
+    <CursorControls></CursorControls>
     <DrawingControls></DrawingControls>
     <DaisyUiThemeSelector></DaisyUiThemeSelector>
   </div>
@@ -8,6 +9,7 @@
 import { useChartStore } from './stores/chart'
 import DaisyUiThemeSelector from './DaisyUiThemeSelector.vue'
 import DrawingControls from './DrawingControls.vue'
+import CursorControls from './CursorControls.vue'
 
 const chartStore = useChartStore()
 

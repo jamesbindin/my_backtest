@@ -3,6 +3,7 @@
       <Candlestick :d="d" :stroke-width="1" :x="chartStore.x" :y="chartStore.y"/>
     </g>
     <HorizontalLine v-for="line in horizontalLinesStore.horizontalLines" :key="line.uuid" :horizontalLine="line" />
+    <Crosshair v-if="controlsStore.cursorMode === controlsStore.cursorModeEnum.CROSSHAIR"></Crosshair>
 </template>
 <script lang="ts" setup>
 import { useChartStore } from './stores/chart';
@@ -10,9 +11,12 @@ import Candlestick from './Candlestick.vue'
 import { watch, ref } from 'vue';
 import HorizontalLine from './HorizontalLine.vue'
 import { useHorizontalLinesStore } from './stores/horizontalLine';
+import Crosshair from './Crosshair.vue'
+import { useControlsStore } from './stores/controls';
 
 const chartStore = useChartStore()
 const horizontalLinesStore = useHorizontalLinesStore()
+const controlsStore = useControlsStore()
 const oldX = ref(chartStore.x)
 const oldY = ref(chartStore.y)
 
