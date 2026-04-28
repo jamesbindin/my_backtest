@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import { inject, watch } from 'vue';
-import { useTooltipStore } from './stores/tooltips';
+import { useTooltipStore } from '../../stores/tooltips';
 
 const props = defineProps({
   d: {

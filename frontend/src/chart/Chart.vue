@@ -13,11 +13,11 @@
 <script setup lang="ts">
 
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
-import ChartXScale from './ChartXScale.vue'
-import ChartYScale from './ChartYScale.vue'
-import ChartItems from './ChartItems.vue'
-import { useChartStore } from './stores/chart'
-import useChartEventsManager from './chartEventsManager'
+import ChartXScale from '@/chart/ChartXScale.vue'
+import ChartYScale from '@/chart/ChartYScale.vue'
+import ChartItems from '@/chart/items/ChartItems.vue'
+import { useChartStore } from '@/stores/chart'
+import useChartEventsManager from '@/chart/events/chartEventsManager'
 const chartStore = useChartStore()
 
 const svg = useTemplateRef('svg')

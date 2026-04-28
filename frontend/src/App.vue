@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, provide } from 'vue'
 import { inject, ref } from 'vue'
-import Chart from './Chart.vue'
+import Chart from './chart/Chart.vue'
 import { useChartStore } from '@/stores/chart'
-import Tooltips from './Tooltips.vue'
-import ChartControls from './ChartControls.vue'
+import Tooltips from './chart/Tooltips.vue'
+import ChartControls from './chart/ChartControls.vue'
 
 const chartStore = useChartStore()
 

@@ -8,8 +8,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import DaisyUiThemeSelector from './DaisyUiThemeSelector.vue'
-import { useControlsStore } from './stores/controls'
+import DaisyUiThemeSelector from '@/DaisyUiThemeSelector.vue'
+import { useControlsStore } from '../stores/controls'
 
 const controlsStore = useControlsStore()
 

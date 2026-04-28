@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useHorizontalLineMode } from '@/horizontalLineMode'
-import { usePanMode } from '@/panMode'
-import { useCrosshairMode } from '@/crosshairMode'
+import { useHorizontalLineMode } from '@/chart/events/horizontalLineMode'
+import { usePanMode } from '@/chart/events/panMode'
+import { useCrosshairMode } from '@/chart/events/crosshairMode'
 
 export const useControlsStore = defineStore('controls', () => {
   const pointerDragDistanceX = ref<number | null>(null)

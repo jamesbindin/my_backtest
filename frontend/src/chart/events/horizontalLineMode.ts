@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
-import { useChartStore } from './stores/chart'
-import { useHorizontalLinesStore } from './stores/horizontalLine'
+import { useChartStore } from '../../stores/chart'
+import { useHorizontalLinesStore } from '../../stores/horizontalLine'
 import { useMouseCoordinatesRelativeToSvg } from './mouseCoordsRelativeToSvg'
 import { v4 as uuidv4 } from 'uuid';
 

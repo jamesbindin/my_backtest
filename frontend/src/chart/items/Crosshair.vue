@@ -8,8 +8,8 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useChartStore } from './stores/chart';
-import { useCrosshairStore } from './stores/crosshair';
+import { useChartStore } from '../../stores/chart';
+import { useCrosshairStore } from '../../stores/crosshair';
 
 const crosshairStore = useCrosshairStore()
 const chartStore = useChartStore()

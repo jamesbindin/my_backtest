@@ -11,7 +11,7 @@
 
 </template>    
 <script setup lang="ts">
-import { useChartStore } from './stores/chart';
+import { useChartStore } from '../../stores/chart';
 const props = defineProps({
     horizontalLine: {
         type: Object,

@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
-import { useChartStore } from './stores/chart'
-import { useCrosshairStore } from './stores/crosshair'
+import { useChartStore } from '../../stores/chart'
+import { useCrosshairStore } from '../../stores/crosshair'
 import { useMouseCoordinatesRelativeToSvg } from './mouseCoordsRelativeToSvg'
 
 export function useCrosshairMode() {

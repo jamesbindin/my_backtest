@@ -6,13 +6,13 @@
     <Crosshair v-if="controlsStore.activeModes[controlsStore.ModesEnum.CROSSHAIR]"></Crosshair>
 </template>
 <script lang="ts" setup>
-import { useChartStore } from './stores/chart';
-import Candlestick from './Candlestick.vue'
+import { useChartStore } from '@/stores/chart';
+import Candlestick from '@/chart/items/Candlestick.vue'
 import { watch, ref } from 'vue';
-import HorizontalLine from './HorizontalLine.vue'
-import { useHorizontalLinesStore } from './stores/horizontalLine';
-import Crosshair from './Crosshair.vue'
-import { useControlsStore } from './stores/controls';
+import HorizontalLine from '@/chart/items/HorizontalLine.vue'
+import { useHorizontalLinesStore } from '@/stores/horizontalLine';
+import Crosshair from '@/chart/items/Crosshair.vue'
+import { useControlsStore } from '@/stores/controls';
 
 const chartStore = useChartStore()
 const horizontalLinesStore = useHorizontalLinesStore()

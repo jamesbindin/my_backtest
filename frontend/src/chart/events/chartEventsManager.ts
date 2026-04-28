@@ -1,6 +1,6 @@
 import { watch } from 'vue'
-import { useChartStore } from './stores/chart'
-import { useControlsStore } from './stores/controls'
+import { useChartStore } from '../../stores/chart'
+import { useControlsStore } from '../../stores/controls'
 
 export default function useChartEventsManager() {
     const chartStore = useChartStore()
