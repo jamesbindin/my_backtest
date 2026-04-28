@@ -23,11 +23,6 @@ const oldY = ref(chartStore.y)
 function updateChartData() {
     console.log('Updating chart data...')
     if(!chartStore.chartItemsRequireUpdate) return
-    if(chartStore.x.domain()[0].getTime() == oldX.value?.domain()[0].getTime() && chartStore.x.domain()[1].getTime() == oldX.value?.domain()[1].getTime()
-    && chartStore.y.domain()[0] == oldY.value?.domain()[0] && chartStore.y.domain()[1] == oldY.value?.domain()[1]){
-        console.log('Scales have not changed, skipping chart data update.')
-        return
-    }
     oldX.value = chartStore.x
     oldY.value = chartStore.y
 

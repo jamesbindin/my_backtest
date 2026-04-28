@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { useHorizontalLineMode } from '@/chart/events/horizontalLineMode'
 import { usePanMode } from '@/chart/events/panMode'
 import { useCrosshairMode } from '@/chart/events/crosshairMode'
+import { useZoomMode } from '@/chart/events/zoomMode'
 
 export const useControlsStore = defineStore('controls', () => {
   const pointerDragDistanceX = ref<number | null>(null)
@@ -11,12 +12,14 @@ export const useControlsStore = defineStore('controls', () => {
     HORIZONTAL_LINE: 'horizontal_line',
     PAN: 'pan',
     CROSSHAIR: 'crosshair',
+    ZOOM: 'zoom'
   });
 
   const modes = {
     [ModesEnum.HORIZONTAL_LINE]: {composable: useHorizontalLineMode, label: 'Horizontal Line', tearDown: () => {}},
     [ModesEnum.PAN]: {composable: usePanMode, label: 'Pan', tearDown: () => {}},
     [ModesEnum.CROSSHAIR]: {composable: useCrosshairMode, label: 'Crosshair', tearDown: () => {}},
+    [ModesEnum.ZOOM]: {composable: useZoomMode, label: 'Zoom', tearDown: () => {}}
   }
 
   const activeModes = ref<Record<string, typeof modes[keyof typeof modes] | undefined>>({})
