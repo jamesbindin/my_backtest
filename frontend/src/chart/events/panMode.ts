@@ -1,6 +1,7 @@
 import { ref, watch } from 'vue'
 import { useChartStore } from '../../stores/chart'
 import * as d3 from 'd3'
+import { useMouseCoordinatesRelativeToSvg } from './mouseCoordsRelativeToSvg'
 
 export function usePanMode() {
   const chartStore = useChartStore()
@@ -12,14 +13,17 @@ export function usePanMode() {
   const onPointerDown = function (event: PointerEvent) {
       event.preventDefault()
       pointerDown.value = true
-      pointerDragStartX.value = event.clientX
+      const { x, y } = useMouseCoordinatesRelativeToSvg(chartStore.svgTemplateRef as SVGSVGElement, event)
+      pointerDragStartX.value = x
       pointerDragtStartDomain = chartStore.x.domain()
   }
 
   const onPointerMove = function (event: PointerEvent) {
       event.preventDefault()
       if(pointerDown.value) {
-          pointerDragDistanceX.value = event.clientX - (pointerDragStartX.value ?? event.clientX)
+        const { x, y } = useMouseCoordinatesRelativeToSvg(chartStore.svgTemplateRef as SVGSVGElement, event)
+        pointerDragDistanceX.value = x - (pointerDragStartX.value ?? x)
+
       }
   }
 

@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import * as d3 from 'd3'
-import { inject, useTemplateRef, watch, onMounted } from 'vue';
+import { useTemplateRef, watch, onMounted } from 'vue';
 import { useChartStore } from '@/stores/chart'
 const chartStore = useChartStore()
 

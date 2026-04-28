@@ -1,16 +1,13 @@
 <template>
     <g ref="gx" :transform="`translate(0, ${props.height})`" stroke-width="0.5"></g>
-    <!-- <g ref="gx"  stroke-width="0.5"></g> -->
 </template>
 
 <script lang="ts" setup>
 import * as d3 from 'd3'
 import { inject, useTemplateRef, watch, onMounted } from 'vue';
 import { useChartStore } from '@/stores/chart'
-import { useControlsStore } from '@/stores/controls'
 
 const chartStore = useChartStore()
-const controlsStore = useControlsStore()
 
 const props = defineProps({
   width: {
