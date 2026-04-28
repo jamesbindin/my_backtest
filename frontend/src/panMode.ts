@@ -3,7 +3,6 @@ import { useChartStore } from './stores/chart'
 import * as d3 from 'd3'
 
 export function usePanMode() {
-  console.log('usePanMode called')
   const chartStore = useChartStore()
   let pointerDown = ref(false)
   let pointerDragStartX = ref<number | null>(null)
@@ -59,12 +58,11 @@ watch(pointerDragDistanceX, (newDistance) => {
 })
 
   const tearDown = function() {
-    console.log('Tearing down pan mode')
     chartStore.svgTemplateRef?.removeEventListener('pointerdown', onPointerDown)
     chartStore.svgTemplateRef?.removeEventListener('pointermove', onPointerMove)
     chartStore.svgTemplateRef?.removeEventListener('pointerup', onPointerUpOrCancel)
     chartStore.svgTemplateRef?.removeEventListener('pointercancel', onPointerUpOrCancel)
   }
 
-  return tearDown 
+  return { tearDown }
 }

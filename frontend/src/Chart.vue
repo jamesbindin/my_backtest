@@ -17,7 +17,7 @@ import ChartXScale from './ChartXScale.vue'
 import ChartYScale from './ChartYScale.vue'
 import ChartItems from './ChartItems.vue'
 import { useChartStore } from './stores/chart'
-
+import useChartEventsManager from './chartEventsManager'
 const chartStore = useChartStore()
 
 const svg = useTemplateRef('svg')
@@ -26,6 +26,7 @@ const chartContainer = useTemplateRef('chart-container')
 onMounted(() => {
     if(svg.value) {
         chartStore.setSvgTemplateRef(svg.value)
+        useChartEventsManager()
     }
     if(chartContainer.value) {
         chartStore.setChartContainer(chartContainer.value)

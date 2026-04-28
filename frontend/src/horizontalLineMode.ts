@@ -44,5 +44,5 @@ const onPointerDown = function (event: PointerEvent) {
     chartStore.svgTemplateRef?.removeEventListener('pointermove', onPointerMove)
   }
 
-  return tearDown 
+  return { tearDown } 
 }

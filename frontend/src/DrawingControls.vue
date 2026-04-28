@@ -25,6 +25,11 @@
     </li>
   </ul>
 </div>
+    
+     <!-- <label v-for="modeKey in modeKeys" :key="modeKey" class="flex gap-2 items-center border-base-300 border rounded-box p-3 bg-base-100">
+        <span class="label">{{ modes[modeKey]?.label }}</span>
+        <input type="checkbox" className="toggle toggle-md"/>
+     </label> -->
 </template>
 <script lang="ts" setup>
 import { useControlsStore } from './stores/controls'
@@ -34,12 +39,10 @@ import { onMounted, watch, ref  } from 'vue'
 const controlsStore = useControlsStore()
 const drawingModeEnum = controlsStore.DrawingModeEnum
 
-
 const modes = ref({
     [drawingModeEnum.NONE]: {label: 'None',  composable: () => {}, active: true},
     [drawingModeEnum.HORIZONTAL_LINE]: {label: 'Horizontal Line', composable: useHorizontalLineMode, active: false}
 })
-
 
 const modeKeys = Object.keys(modes.value) as (keyof typeof modes.value)[]
 

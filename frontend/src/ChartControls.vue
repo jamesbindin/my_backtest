@@ -1,17 +1,17 @@
 <template>
-  <div class="buttons flex gap-4">
-    <CursorControls></CursorControls>
-    <DrawingControls></DrawingControls>
+  <div class="buttons flex gap-4 mt-2 items-center">
+     <label v-for="mode, key in controlsStore.modes" :key="mode.label" class="flex gap-2 items-center border-base-300 border rounded-box p-3 bg-base-100">
+        <span class="label">{{ mode.label }}</span>
+        <input type="checkbox" className="toggle toggle-md" :checked="isChecked(key)" @change="checkboxChanged(key)" />
+     </label>
     <DaisyUiThemeSelector></DaisyUiThemeSelector>
   </div>
 </template>
 <script lang="ts" setup>
-import { useChartStore } from './stores/chart'
 import DaisyUiThemeSelector from './DaisyUiThemeSelector.vue'
-import DrawingControls from './DrawingControls.vue'
-import CursorControls from './CursorControls.vue'
+import { useControlsStore } from './stores/controls'
 
-const chartStore = useChartStore()
+const controlsStore = useControlsStore()
 
 const props = defineProps({
     width: {
@@ -24,6 +24,24 @@ const props = defineProps({
     },
 })
 
+function isChecked(key: string) {
+    return (controlsStore.activeModes as Record<string, any>)[key]
+}
+
+function checkboxChanged(key: string) {
+    const isActive = isChecked(key)
+    const modeKey = key as keyof typeof controlsStore.modes
+
+    if(isActive) {
+        var activeModesCopy = {...controlsStore.activeModes}
+        delete activeModesCopy[modeKey]
+        controlsStore.activeModes = activeModesCopy
+    } else {
+        var activeModesCopy = {...controlsStore.activeModes}
+        activeModesCopy[modeKey] = controlsStore.modes[modeKey]
+        controlsStore.activeModes = activeModesCopy
+    }
+}
 
 </script>
 <style scoped>

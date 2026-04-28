@@ -3,7 +3,7 @@
       <Candlestick :d="d" :stroke-width="1" :x="chartStore.x" :y="chartStore.y"/>
     </g>
     <HorizontalLine v-for="line in horizontalLinesStore.horizontalLines" :key="line.uuid" :horizontalLine="line" />
-    <Crosshair v-if="controlsStore.cursorMode === controlsStore.cursorModeEnum.CROSSHAIR"></Crosshair>
+    <Crosshair v-if="controlsStore.activeModes[controlsStore.ModesEnum.CROSSHAIR]"></Crosshair>
 </template>
 <script lang="ts" setup>
 import { useChartStore } from './stores/chart';
