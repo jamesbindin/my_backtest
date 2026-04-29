@@ -2,6 +2,7 @@ import { ref, watch } from 'vue'
 import { useChartStore } from '../../stores/chart'
 import * as d3 from 'd3'
 
+
 export function useZoomMode() {
     const chartStore = useChartStore()
 
@@ -9,13 +10,18 @@ export function useZoomMode() {
     let timer : ReturnType<typeof setTimeout> | null = null
 
     function setScales(){
+
         const currentStartTime = chartStore.x.domain()[0].getTime()
         const currentEndTime = chartStore.x.domain()[1].getTime()
-        
         const wheelValuesTotal = wheelValues.reduce((acc, val) => acc + val, 0)
-        let newStartTime = currentStartTime + wheelValuesTotal * 10000
-
+        let newStartTime = currentStartTime + wheelValuesTotal * (chartStore.chartData.length * 100)
         let newEndTime = currentEndTime
+        
+        if(chartStore.chartData.length > 0 && chartStore.chartData.length <= 3 && wheelValuesTotal > 0) {
+            const firstDataTime = new Date(chartStore.chartData[0]!.time).getTime()
+            newStartTime = firstDataTime - (chartStore.timeFrameSteps[chartStore.timeframe] ?? 0)
+        }
+
         wheelValues = []
 
         chartStore.updateX(chartStore.x.copy().domain([new Date(newStartTime), new Date(newEndTime)])) 

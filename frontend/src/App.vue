@@ -9,10 +9,9 @@ import ChartControls from './chart/ChartControls.vue'
 const chartStore = useChartStore()
 
 const axios: any = inject('axios')
-const timeFrame = 'M5'
 
 function retrieveData(){
-  axios.get(`bars/EURUSD/${timeFrame}`, {
+  axios.get(`bars/EURUSD/${chartStore.timeframe}`, {
     params: {
       timefrom: '2020-01-01T00:00',
       limit: chartStore.limit
@@ -29,24 +28,6 @@ onMounted(() => {
   retrieveData()
 })
 
-const timeFrameSteps: Record<string, number> = {
-  'M1': 60 * 1000,
-  'M5': 5 * 60 * 1000,
-  'M15': 15 * 60 * 1000,
-  'M30': 30 * 60 * 1000,
-  'H1': 60 * 60 * 1000,
-  'H4': 4 * 60 * 60 * 1000,
-  'D1': 24 * 60 * 60 * 1000,
-}
-
-const barColours: Record<string, string> = {
-    up: 'rgba(255, 0, 0, 0.2)',
-    down: 'rgba(0, 255, 0, 0.2)'
-}
-
-provide('timeFrameSteps', timeFrameSteps)
-provide('timeframe', timeFrame)
-provide('barColours', barColours)
 
 
 </script>

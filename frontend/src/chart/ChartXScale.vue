@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import * as d3 from 'd3'
-import { inject, useTemplateRef, watch, onMounted } from 'vue';
+import { useTemplateRef, watch, onMounted } from 'vue';
 import { useChartStore } from '@/stores/chart'
 
 const chartStore = useChartStore()
@@ -22,9 +22,6 @@ const props = defineProps({
 
 const gx = useTemplateRef('gx')
 
-const timeFrameSteps = inject('timeFrameSteps') as Record<string, number>
-const timeframe = inject('timeframe') as string
-
 watch(() => chartStore.xScaleRequiresUpdate, () => {
     if(!gx.value) return
     d3.select(gx.value).call(d3.axisBottom(chartStore.x));
@@ -35,7 +32,7 @@ watch(() => chartStore.xScaleRequiresUpdate, () => {
 function setScales(newData?: any) {
   const dataToUse = newData ?? chartStore.chartData
     if(!gx.value) return
-    const x = d3.scaleUtc([new Date(dataToUse[0].time).getTime() - (timeFrameSteps[timeframe] ?? 0), new Date(dataToUse[dataToUse.length - 1].time)], [0, props.width])
+    const x = d3.scaleUtc([new Date(dataToUse[0].time).getTime() - (chartStore.timeFrameSteps[chartStore.timeframe] ?? 0), new Date(dataToUse[dataToUse.length - 1].time)], [0, props.width])
     d3.select(gx.value).call(d3.axisBottom(x));
     chartStore.updateX(x)
 }
