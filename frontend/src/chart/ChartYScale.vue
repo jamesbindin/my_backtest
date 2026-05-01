@@ -1,5 +1,5 @@
 <template>
-    <g ref="gy" :transform="`translate(${props.width}, 0)`" stroke-width="0.5"></g>
+    <g ref="gy" :transform="`translate(${props.width}, 0)`" :stroke-width="chartStore.axisStrokeWidth" :style="`font-size: ${chartStore.axisFontSize}rem;`"></g>
 </template>
 
 <script lang="ts" setup>

@@ -27,6 +27,9 @@ export const useChartStore = defineStore('chart', () => {
   const chartIndexRange = ref({ from: limit.value - numberOfBarsOnChart.value, to: limit.value })
   const x = ref<any>(null)
   const y = ref<any>(null)
+
+  const axisStrokeWidth = 2 // px
+  const axisFontSize = 1 // rem
   const xScaleRequiresUpdate = ref(false)
   const yScaleRequiresUpdate = ref(false)
   const chartItemsRequireUpdate = ref(false)
@@ -74,5 +77,5 @@ export const useChartStore = defineStore('chart', () => {
     svgTemplateRef.value = element
   }
 
-  return { chartIndexRange, chartData, limit, numberOfBarsOnChart, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, chartContainer, svgTemplateRef, updateChartData, updateChartIndexRange, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate, setChartContainer, setSvgTemplateRef, timeframe, timeFrameSteps, barColours }
+  return { chartIndexRange, chartData, limit, numberOfBarsOnChart, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, chartContainer, svgTemplateRef, updateChartData, updateChartIndexRange, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate, setChartContainer, setSvgTemplateRef, timeframe, timeFrameSteps, barColours, axisStrokeWidth, axisFontSize }
 })
