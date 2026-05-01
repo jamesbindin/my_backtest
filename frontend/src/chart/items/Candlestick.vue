@@ -8,7 +8,7 @@
         <polygon
         :points="calculateInnerRectangle()"
         stroke-width="0"
-        :class="isBull ? 'fill-primary stroke-base-content' : 'fill-secondary stroke-base-content'"
+        :class="barClasses()"
         />
         <line 
         :x1="barMiddle()" 
@@ -45,7 +45,7 @@ const props = defineProps({
   },
   strokeWidth: {
     type: Number,
-    default: .1,
+    default: 0.1,
 
   }, 
   marginWidth: {
@@ -164,6 +164,11 @@ function candlestickMouseOver(event: MouseEvent) {
         ],
         position: { x: event.pageX, y: event.pageY }
     }])
+}
+
+function barClasses() {
+    if(props.d.open === props.d.close) return 'fill-base-content'
+    return isBull ? 'fill-primary' : 'fill-secondary'
 }
 
 function candlestickMouseOut() {
