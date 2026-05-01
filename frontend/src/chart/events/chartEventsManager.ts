@@ -26,6 +26,11 @@ export default function useChartEventsManager() {
         }
     }, { deep: true })
     
-    // controlsStore.activeModes = {[controlsStore.ModesEnum.PAN]: controlsStore.modes[controlsStore.ModesEnum.PAN]}
+    controlsStore.activeModes = {
+        [controlsStore.ModesEnum.PAN]: controlsStore.modes[controlsStore.ModesEnum.PAN],
+        [controlsStore.ModesEnum.ZOOM]: controlsStore.modes[controlsStore.ModesEnum.ZOOM],
+        [controlsStore.ModesEnum.CROSSHAIR]: controlsStore.modes[controlsStore.ModesEnum.CROSSHAIR],
+    }
+
 
 }

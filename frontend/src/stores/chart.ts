@@ -22,7 +22,7 @@ export const useChartStore = defineStore('chart', () => {
 
   const data = ref<{ time: string, open: number, high: number, low: number, close: number }[]>([])
   const chartData = ref<{ time: string, open: number, high: number, low: number, close: number }[]>([])
-  const limit = ref(10000)
+  const limit = ref(10000-45)
   const numberOfBarsOnChart = ref(20)
   const chartIndexRange = ref({ from: limit.value - numberOfBarsOnChart.value, to: limit.value })
   const x = ref<any>(null)
