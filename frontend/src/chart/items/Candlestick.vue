@@ -156,7 +156,7 @@ function barMiddle() {
 function candlestickMouseOver(event: MouseEvent) {
     tooltipStore.updateTooltips([{
         paragraphs: [
-            `Time: ${new Date(props.d.time).toLocaleString()}`,
+            `Time: ${new Date(props.d.time).toUTCString()}`,
             `Open: ${props.d.open}`,
             `High: ${props.d.high}`,
             `Low: ${props.d.low}`,
