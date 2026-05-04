@@ -12,25 +12,23 @@
         />
         <line 
         :x1="barMiddle()" 
-        :y1="y(d.high)" 
+        :y1="chartStore.y(props.d.high)" 
         :x2="barMiddle()" 
-        :y2="y(Math.max(d.open, d.close))" 
+        :y2="chartStore.y(Math.max(props.d.open, props.d.close))" 
         :stroke-width="strokeWidthPx"
         class="stroke-base-content"
         />
         <line 
         :x1="barMiddle()" 
-        :y1="y(d.low)" 
+        :y1="chartStore.y(props.d.low)" 
         :x2="barMiddle()" 
-        :y2="y(Math.min(d.open, d.close))" 
+        :y2="chartStore.y(Math.min(props.d.open, props.d.close))" 
         :stroke-width="strokeWidthPx"
         class="stroke-base-content"
         />
     </g>
 </template>
 <script setup lang="ts">
-import * as d3 from 'd3'
-import { computed, type PropType, ref } from 'vue';
 import { useTooltipStore } from '../../stores/tooltips';
 import { useChartStore } from '@/stores/chart'
 
@@ -59,14 +57,6 @@ const props = defineProps({
     downFillColour: {
         type: Object,
         default: {r: 0, g: 255, b: 0, a: 0.5}
-    },
-    x: {
-        type: Object as PropType<d3.ScaleTime<number, number>>,
-        required: true
-    },
-    y: {
-        type: Object as PropType<d3.ScaleLinear<number, number>>,
-        required: true
     }
 })
 
@@ -77,6 +67,7 @@ const tooltipStore = useTooltipStore()
 const timeWidth = chartStore.timeFrameSteps[chartStore.timeframe] ?? 0
 const timeStamp = new Date(props.d.time).getTime()
 
+
 var widthPx = 0
 var xEndPx = 0
 
@@ -84,11 +75,11 @@ var marginWidthPx = 0
 var strokeWidthPx = 0
 
 function updateWidth() {
-    widthPx = timeWidth > 0 ? props.x(timeStamp) - props.x(timeStamp - timeWidth) : 0
+    widthPx = timeWidth > 0 ? chartStore.x(timeStamp) - chartStore.x(timeStamp - timeWidth) : 0
 }
 
 function updateXEnd() {
-    xEndPx = props.x(timeStamp)
+    xEndPx = chartStore.x(timeStamp)
 }
 
 function updateMarginWidthPx() {
@@ -112,8 +103,8 @@ function calculateOuterRectangle() {
 
     outerXEnd = xEndPx - marginWidthPx
     outerXStart = (xEndPx - widthPx) + marginWidthPx
-    outerYOpen = props.y(props.d.open)
-    outerYClose = props.y(props.d.close)
+    outerYOpen = chartStore.y(props.d.open)
+    outerYClose = chartStore.y(props.d.close)
     const yIsZero = Math.abs(outerYOpen - outerYClose) === 0 
 
     const yOpen = yIsZero ? outerYOpen + 1 : outerYOpen
@@ -150,7 +141,7 @@ function calculateInnerRectangle() {
 }
 
 function barMiddle() {
-    return props.x(timeStamp - timeWidth / 2)
+    return chartStore.x(timeStamp - timeWidth / 2)
 }
 
 function candlestickMouseOver(event: MouseEvent) {
