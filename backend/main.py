@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import create_db_and_tables, engine
-from .models import Instrument, PriceData
+from .models import Domain, Instrument, PriceData
 
 app = FastAPI()
 
@@ -71,6 +71,41 @@ async def get_bars(symbol: symbol, timeframe: timeframes, timefrom: datetime = N
                 price_data.reverse()
                 return price_data
 
+@app.get("/domains/{symbol}/{timeframe}")
+async def get_domains(symbol: symbol, timeframe: timeframes, timefrom: datetime = None, timeto: datetime = None, limit: int = None):
+    with Session(engine) as session:
+        instrument = session.exec(
+            select(Instrument).where(Instrument.symbol == symbol.value, Instrument.timeframe == timeframe.value)
+        ).first()
+        if not instrument:
+            return {"error": "Instrument not found"}
+        if timefrom and timeto:
+            domains = session.exec(
+                select(Domain).where(
+                    Domain.instrument_id == instrument.id,
+                    Domain.time_min >= timefrom,
+                    Domain.time_max <= timeto
+                ).order_by(Domain.time_min)
+            ).all()
+            return domains
+        if limit:
+            if timefrom:
+                domains = session.exec(
+                    select(Domain).where(
+                        Domain.instrument_id == instrument.id,
+                        Domain.time_min >= timefrom
+                    ).order_by(Domain.time_min.asc()).limit(limit)
+                ).all()
+                return domains
+            if timeto:
+                domains = session.exec(
+                    select(Domain).where(
+                        Domain.instrument_id == instrument.id,
+                        Domain.time_max <= timeto
+                    ).order_by(Domain.time_max.desc()).limit(limit)
+                ).all()
+                domains.reverse()
+                return domains
 
 # def main():
 #     create_db_and_tables()

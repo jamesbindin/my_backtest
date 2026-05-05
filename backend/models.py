@@ -7,6 +7,11 @@ class Instrument(SQLModel, table=True):
     symbol: str
     timeframe: str
 
+class Domain(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    time_min: datetime
+    time_max: datetime
+    instrument_id: int = Field(foreign_key="instrument.id")
 
 class PriceData(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
@@ -17,4 +22,5 @@ class PriceData(SQLModel, table=True):
     low: float
     close: float
     volume: int
+    domain_id: int = Field(default=None, foreign_key="domain.id", nullable=True)
 

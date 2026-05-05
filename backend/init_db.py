@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 import pandas as pd
-from .models import Instrument, PriceData
+from .models import Instrument, PriceData 
 from .database import create_db_and_tables, engine
 
 
