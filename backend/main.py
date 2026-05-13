@@ -36,7 +36,6 @@ class timeframes(Enum):
 
 @app.get("/bars/{symbol}/{timeframe}")
 async def get_bars(symbol: symbol, timeframe: timeframes, timefrom: datetime = None, timeto: datetime = None, limit: int = None):
-    print(timeto)
     with Session(engine) as session:
         instrument = session.exec(
             select(Instrument).where(Instrument.symbol == symbol.value, Instrument.timeframe == timeframe.value)
@@ -72,7 +71,7 @@ async def get_bars(symbol: symbol, timeframe: timeframes, timefrom: datetime = N
                 return price_data
 
 @app.get("/domains/{symbol}/{timeframe}")
-async def get_domains(symbol: symbol, timeframe: timeframes, timefrom: datetime = None, timeto: datetime = None, limit: int = None):
+async def get_domains(symbol: symbol, timeframe: timeframes, timefrom: datetime = None, timeto: datetime = None, asArrays: bool = True):
     with Session(engine) as session:
         instrument = session.exec(
             select(Instrument).where(Instrument.symbol == symbol.value, Instrument.timeframe == timeframe.value)
@@ -83,29 +82,14 @@ async def get_domains(symbol: symbol, timeframe: timeframes, timefrom: datetime 
             domains = session.exec(
                 select(Domain).where(
                     Domain.instrument_id == instrument.id,
-                    Domain.time_min >= timefrom,
-                    Domain.time_max <= timeto
+                    Domain.time_max >= timefrom,
+                    Domain.time_min <= timeto
                 ).order_by(Domain.time_min)
             ).all()
+            if asArrays:
+                return [[domain.time_min, domain.time_max] for domain in domains]
             return domains
-        if limit:
-            if timefrom:
-                domains = session.exec(
-                    select(Domain).where(
-                        Domain.instrument_id == instrument.id,
-                        Domain.time_min >= timefrom
-                    ).order_by(Domain.time_min.asc()).limit(limit)
-                ).all()
-                return domains
-            if timeto:
-                domains = session.exec(
-                    select(Domain).where(
-                        Domain.instrument_id == instrument.id,
-                        Domain.time_max <= timeto
-                    ).order_by(Domain.time_max.desc()).limit(limit)
-                ).all()
-                domains.reverse()
-                return domains
+            
 
 # def main():
 #     create_db_and_tables()
