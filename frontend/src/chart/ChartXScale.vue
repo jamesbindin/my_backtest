@@ -23,22 +23,20 @@ const props = defineProps({
 const gx = useTemplateRef('gx')
 
 watch(() => chartStore.xScaleRequiresUpdate, () => {
-    if(!gx.value) return
+    if(!gx.value || !chartStore.xScaleRequiresUpdate) return
+    if(chartStore.x === null || chartStore.x === undefined){ 
+      const firstTime = chartStore.chartData?.[0]?.time
+      const lastTime = chartStore.chartData?.[chartStore.chartData.length - 1]?.time
+      if (!firstTime || !lastTime) return
+      chartStore.updateX(d3.scaleUtc([new Date(firstTime).getTime() - (chartStore.timeFrameSteps?.[chartStore.timeframe] ?? 0), new Date(lastTime)], [0, props.width]))
+    }
     d3.select(gx.value).call(d3.axisBottom(chartStore.x));
     chartStore.updateXScaleRequiresUpdate(false)
     chartStore.updateChartItemsRequireUpdate(true)
 })
 
-function setScales(newData?: any) {
-  const dataToUse = newData ?? chartStore.chartData
-    if(!gx.value) return
-    const x = d3.scaleUtc([new Date(dataToUse[0].time).getTime() - (chartStore.timeFrameSteps[chartStore.timeframe] ?? 0), new Date(dataToUse[dataToUse.length - 1].time)], [0, props.width])
-    d3.select(gx.value).call(d3.axisBottom(x));
-    chartStore.updateX(x)
-}
-
 onMounted(() => {
-    setScales()
+  chartStore.updateXScaleRequiresUpdate(true)
 })
 
 
