@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useChartStore = defineStore('chart', () => {
@@ -22,7 +22,7 @@ export const useChartStore = defineStore('chart', () => {
 
   const data = ref<{ time: string, open: number, high: number, low: number, close: number }[]>([])
   const chartData = ref<{ time: string, open: number, high: number, low: number, close: number }[]>([])
-  const domains = ref<{ x: [number, number], y: [number, number] }[]>([])
+  const gaps = ref<Array<[Date, Date]>>([])
   const x = ref<any>(null)
   const y = ref<any>(null)
 
@@ -43,8 +43,8 @@ export const useChartStore = defineStore('chart', () => {
     chartData.value = newChartData
   }
 
-  function updateDomains(newDomains: any) {
-    domains.value = newDomains
+  function updateGaps(newGaps: any) {
+    gaps.value = newGaps
   }
 
   function updateX(newX: any) {
@@ -75,5 +75,5 @@ export const useChartStore = defineStore('chart', () => {
     svgTemplateRef.value = element
   }
 
-  return { chartData, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, chartContainer, svgTemplateRef, updateChartData, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate, setChartContainer, setSvgTemplateRef, timeframe, timeFrameSteps, barColours, axisStrokeWidth, axisFontSize, domains, updateDomains }
+  return { chartData, data, x, y, xScaleRequiresUpdate, yScaleRequiresUpdate, chartItemsRequireUpdate, chartContainer, svgTemplateRef, updateChartData, updateData, updateX, updateY, updateXScaleRequiresUpdate, updateYScaleRequiresUpdate, updateChartItemsRequireUpdate, setChartContainer, setSvgTemplateRef, timeframe, timeFrameSteps, barColours, axisStrokeWidth, axisFontSize, gaps, updateGaps }
 })

@@ -20,6 +20,7 @@
     "@tailwindcss/vite": "^4.2.2",
     "@vueuse/components": "^14.2.1",
     "@vueuse/core": "^14.2.1",
+    "d3fc": "^15.2.13",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.2.2",
     "uuid": "^13.0.0",

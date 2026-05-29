@@ -7,6 +7,8 @@ import * as d3 from 'd3'
 import { useTemplateRef, watch, onMounted } from 'vue';
 import { useChartStore } from '@/stores/chart'
 
+import { scaleDiscontinuous, discontinuityRange } from 'd3fc';
+
 const chartStore = useChartStore()
 
 const props = defineProps({
@@ -27,8 +29,12 @@ watch(() => chartStore.xScaleRequiresUpdate, () => {
     if(chartStore.x === null || chartStore.x === undefined){ 
       const firstTime = chartStore.chartData?.[0]?.time
       const lastTime = chartStore.chartData?.[chartStore.chartData.length - 1]?.time
+
       if (!firstTime || !lastTime) return
-      chartStore.updateX(d3.scaleUtc([new Date(firstTime).getTime() - (chartStore.timeFrameSteps?.[chartStore.timeframe] ?? 0), new Date(lastTime)], [0, props.width]))
+      const scaleUTC = d3.scaleUtc([new Date(firstTime).getTime() - (chartStore.timeFrameSteps?.[chartStore.timeframe] ?? 0), new Date(lastTime)], [0, props.width]).range([0, props.width])
+      const scale = scaleDiscontinuous(scaleUTC)
+          .discontinuityProvider(discontinuityRange(...chartStore.gaps))
+      chartStore.updateX(scale)
     }
     d3.select(gx.value).call(d3.axisBottom(chartStore.x));
     chartStore.updateXScaleRequiresUpdate(false)

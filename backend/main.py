@@ -89,7 +89,31 @@ async def get_domains(symbol: symbol, timeframe: timeframes, timefrom: datetime 
             if asArrays:
                 return [[domain.time_min, domain.time_max] for domain in domains]
             return domains
-            
+
+
+@app.get("/gaps/{symbol}/{timeframe}")
+async def get_gaps(symbol: symbol, timeframe: timeframes, timefrom: datetime, timeto: datetime):
+    with Session(engine) as session:
+        instrument = session.exec(
+            select(Instrument).where(Instrument.symbol == symbol.value, Instrument.timeframe == timeframe.value)
+        ).first()
+        if not instrument:
+            return {"error": "Instrument not found"}
+        if timefrom and timeto:
+            domains = session.exec(
+                select(Domain).where(
+                    Domain.instrument_id == instrument.id,
+                    Domain.time_max >= timefrom,
+                    Domain.time_min <= timeto
+                ).order_by(Domain.time_min)
+            ).all()
+            gaps = []
+            for i in range(len(domains) - 1):
+                gap_start = domains[i].time_max
+                gap_end = domains[i + 1].time_min
+                if gap_start < gap_end:
+                    gaps.append([gap_start, gap_end])
+            return gaps
 
 # def main():
 #     create_db_and_tables()
